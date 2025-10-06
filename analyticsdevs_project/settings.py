@@ -1,19 +1,25 @@
+import os # Importar para usar os.environ.get y definir rutas
 from pathlib import Path
+from dotenv import load_dotenv # Importar para leer el archivo .env
+
+# Cargar variables de entorno desde el archivo .env (solo funciona localmente)
+load_dotenv() 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-# BASE_DIR apunta a la carpeta principal del proyecto (donde está manage.py)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Quick-start development settings - unsuitable for production
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-z#&j(j&hjhj&hjhj&hjhj&hjhj&hjhj&hjhj&hjhj&hjhj&hjhj&hjhj&hjhj&hjhj&hjhj&hjhj' # Reemplaza esto con tu clave real
+# Lee la SECRET_KEY de las variables de entorno (en .env o en el panel de PA)
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-tu-clave-por-defecto') 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# ¡IMPORTANTE! Esto soluciona el error CommandError en el entorno local.
-DEBUG = True 
+# Lee el estado de DEBUG de las variables de entorno
+DEBUG = os.environ.get('DEBUG', 'True') == 'True' 
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '::1'] # Hosts permitidos para desarrollo local
-
+# Permite hosts de desarrollo y el dominio de PythonAnywhere (GeraMar94.pythonanywhere.com)
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'GeraMar94.pythonanywhere.com'] 
 
 # Application definition
 
@@ -23,7 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles', # CRÍTICO: Permite el comando collectstatic
     # Mis Apps:
     'core',
     'portafolio',
@@ -45,7 +51,6 @@ ROOT_URLCONF = 'analyticsdevs_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        # Busca plantillas en la carpeta 'templates' de cada app
         'DIRS': [], 
         'APP_DIRS': True,
         'OPTIONS': {
@@ -63,7 +68,6 @@ WSGI_APPLICATION = 'analyticsdevs_project.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -74,7 +78,6 @@ DATABASES = {
 
 
 # Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -93,7 +96,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
 
 LANGUAGE_CODE = 'es-es' # Usamos español de España
 
@@ -108,14 +110,18 @@ USE_TZ = True
 # ----------------------------------------
 STATIC_URL = '/static/'
 
-# Define dónde buscará Django los archivos estáticos a nivel de proyecto.
-# Esto apunta directamente a la carpeta 'static' dentro de la app 'core'.
+# Directorios donde Django busca archivos estáticos en desarrollo (core/static)
 STATICFILES_DIRS = [
     BASE_DIR / 'core/static', 
 ]
 
+# ----------------------------------------------------------------------
+# >>> CONFIGURACIÓN PARA PRODUCCIÓN (collectstatic) <<<
+# ----------------------------------------------------------------------
+
+# Directorio donde 'collectstatic' reunirá todos los archivos estáticos.
+STATIC_ROOT = BASE_DIR / 'staticfiles' 
+
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-STATIC_ROOT = BASE_DIR / 'staticfiles' 
