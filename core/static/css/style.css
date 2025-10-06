@@ -417,6 +417,97 @@ footer a:hover {
         gap: 20px;
     }
 }
+/* ======================================================= */
+/* 1. CLASES DE ESTRUCTURA BASE (Asegurar que los contenedores se ajusten) */
+/* ======================================================= */
+.container {
+    width: 90%; /* Ajusta el ancho para que siempre haya un margen en móvil */
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 15px; /* Pequeño padding lateral */
+}
+
+
+/* ======================================================= */
+/* 2. MEDIA QUERY: TELÉFONOS MÓVILES (Ancho máximo 768px) */
+/* Aplica estos estilos cuando la pantalla sea MÁS PEQUEÑA que 768px */
+/* ======================================================= */
+@media (max-width: 768px) {
+    
+    /* ---- A. NAVEGACIÓN (Navbar) ---- */
+    .navbar .container {
+        flex-direction: column; /* Apila el logo y los links */
+        align-items: flex-start;
+    }
+
+    /* Ocultar los links por defecto en móvil y mostrarlos apilados */
+    .navbar .nav-links {
+        display: none; /* Se recomienda usar JavaScript para alternar 'display: flex' */
+        width: 100%;
+        flex-direction: column;
+        text-align: left;
+    }
+    
+    /* Mostrar los enlaces del menú en línea en móvil si se usa JS/un botón */
+    .nav-links a {
+        display: block;
+        padding: 10px 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Opcional: Si usas un botón de hamburguesa, este es el lugar para mostrarlo */
+    /* .menu-toggle { display: block; } */
+
+
+    /* ---- B. SECCIONES Y TÍTULOS ---- */
+    
+    /* Ajusta el padding de las secciones para dar más espacio vertical en móvil */
+    .hero-section, .github-analysis-section, .case-studies-section, .services-section {
+        padding: 40px 0;
+    }
+
+    /* Reduce el tamaño de fuente de los títulos principales */
+    h1 {
+        font-size: 2.5rem; 
+    }
+    
+    h2 {
+        font-size: 1.8rem;
+    }
+
+    /* ---- C. GRID/FLEX CONTAINERS (Apilar Columnas) ---- */
+    
+    /* El análisis de GitHub (Barras y Pie Chart) debe apilarse */
+    .analysis-flex-container {
+        flex-direction: column;
+    }
+    
+    /* La cuadrícula de Proyectos (Case Study Grid) debe apilarse */
+    .case-study-grid {
+        display: block; /* Desactiva el grid layout */
+    }
+
+    .case-card {
+        width: 100%; /* Las tarjetas ocupan el ancho completo */
+        margin-bottom: 20px;
+    }
+
+    /* La cuadrícula de Servicios debe apilarse */
+    .services-grid {
+        display: block; /* Desactiva el grid layout */
+    }
+    
+    .service-item {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    
+    /* Asegura que los gráficos se vean bien */
+    .bar-chart-wrapper, .pie-chart-wrapper {
+        width: 100%;
+        margin-bottom: 30px;
+    }
+}
 @media (max-width: 600px) {
     .hero-section h1 {
         font-size: 2.2em;
