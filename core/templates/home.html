@@ -1,0 +1,148 @@
+{% load static %} 
+{% load github_extras %} 
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio Profesional - AnalyticsDevs</title>
+    
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"> 
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="#inicio" class="logo">AnalyticsDevs</a> 
+            <div class="nav-links">
+                <a href="#portafolio">Portafolio</a>
+                <a href="#eventos">Eventos</a>
+                <a href="#servicios">Servicios</a>
+                <a href="#contacto">Contacto</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section" id="inicio"> 
+        <div class="container" data-aos="fade-up" data-aos-duration="1200">
+            <div class="hero-content">
+                <h1 data-aos="fade-up">Analítica y Desarrollo de Software</h1>
+                <p class="subtitle" data-aos="fade-up" data-aos-delay="300">Transformando datos en soluciones inteligentes con Python y Django.</p>
+                <a href="#portafolio" class="btn btn-primary" data-aos="zoom-in" data-aos-delay="500">Ver Proyectos</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="github-analysis-section">
+        <div class="container text-center">
+            <h2 data-aos="fade-down">Tecnologías Principales en GitHub</h2>
+            <p class="subtitle" data-aos="fade-down" data-aos-delay="200">Análisis dinámico del stack tecnológico de mis proyectos públicos.</p>
+
+            <div class="analysis-flex-container">
+                
+                <div class="bar-chart-wrapper" data-aos="slide-right">
+                    <div class="language-bar-container">
+                        {% for lang in languages %}
+                            <div class="language-bar" style="width: {{ lang.percent }}%; background-color: {{ lang.color }};">
+                                {{ lang.language }} {{ lang.percent }}%
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="pie-chart-wrapper" data-aos="zoom-in" data-aos-delay="500">
+                    <div class="pie-chart" style="background: conic-gradient({{ gradient_string }});"></div>
+                    
+                    <div class="legend" data-aos="fade-left">
+                        {% for lang in languages %}
+                            <div class="legend-item">
+                                <span style="background-color: {{ lang.color }};"></span> 
+                                {{ lang.language }} {{ lang.percent }}%
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <p class="legend-note">Datos obtenidos directamente de la API de GitHub.</p>
+        </div>
+    </section>
+    <section class="case-studies-section" id="portafolio">
+        <div class="container">
+            <h2 class="text-center" data-aos="fade-up">Proyectos Destacados (Pinned)</h2>
+            
+            <div class="case-study-grid">
+                
+                {% for repo in featured_repos %}
+                <a href="{{ repo.html_url }}" target="_blank" class="case-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 | stringformat:'i' }}00">
+                    
+                    <h3>{{ repo.name }}</h3>
+                    
+                    <p class="nicho" style="color: {{ repo.language | get_language_color_filter }};">
+                        {{ repo.language }}
+                    </p>
+                    
+                    <p>{{ repo.description }}</p>
+
+                    <small>Última actualización: {{ repo.updated_at|date:"d M Y" }}</small>
+                </a>
+                {% empty %}
+                <div style="grid-column: 1 / -1; text-align: center;">
+                    <p>No se pudieron cargar los proyectos destacados de GitHub. Por favor, revisa tu Token de Acceso Personal o la lista de repositorios fijados en 'views.py'.</p>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </section>
+
+    <section class="events-promo-section" id="eventos" data-aos="flip-up">
+        <div class="container text-center">
+            <h2>Próximos Eventos y Webinars</h2>
+            <a href="#" class="btn btn-cta">¡Regístrate!</a>
+        </div>
+    </section>
+
+    <section class="services-section" id="servicios">
+        <div class="container text-center" data-aos="fade-right">
+            <h2>Nuestros Servicios de Consultoría</h2>
+            <div class="services-grid">
+                <div class="service-item" data-aos="zoom-in-right">
+                    <h3>Consultoría en Data</h3>
+                    <p>Análisis avanzado y desarrollo de pipelines de datos.</p>
+                </div>
+                 <div class="service-item" data-aos="zoom-in-left">
+                    <h3>Desarrollo Web (Django)</h3>
+                    <p>Construcción de aplicaciones web robustas y escalables.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact-section" id="contacto" style="padding: 50px 0; background-color: #e9ecef;" data-aos="fade-up">
+        <div class="container text-center">
+            <h2>Contáctanos</h2>
+            <p>Envíanos un mensaje para discutir tu próximo proyecto.</p>
+        </div>
+    </section>
+
+
+    <footer data-aos="fade-in">
+        <div class="container">
+            <p>&copy; 2025 AnalyticsDevs. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+      AOS.init({
+        duration: 800,
+        once: true,
+      });
+    </script>
+</body>
+</html>

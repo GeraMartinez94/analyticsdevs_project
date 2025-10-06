@@ -1,0 +1,447 @@
+/* ================================================================= */
+/* style.css - Versión Mejorada y Profesional               */
+/* ================================================================= */
+
+/* --- 0. Variables (Color Palette y Tipografía) --- */
+:root {
+    /* Colores Principales (Más elegantes) */
+    --primary-color: #1a73e8;       /* Azul de Google/Moderno */
+    --secondary-color: #6c757d;     /* Gris para texto secundario */
+    --accent-color: #00bfa5;        /* Verde Esmeralda para acentos visuales */
+    
+    /* Fondo y Texto */
+    --dark-bg: #1f2833;             /* Gris muy oscuro/Azul medianoche */
+    --light-bg: #f5f5f5;            /* Gris muy claro */
+    --light-text: #ffffff;
+    --dark-text: #333333;
+    
+    /* Sombras y Componentes */
+    --card-bg: #ffffff;
+    --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.1);
+    --shadow-heavy: 0 10px 30px rgba(0, 0, 0, 0.2);
+
+    /* Transiciones */
+    --transition-speed: 0.3s;
+}
+
+/* --- 1. Base y Reset --- */
+body {
+    /* Fuente de reserva moderna */
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    margin: 0;
+    padding: 0;
+    color: var(--dark-text); 
+    background-color: var(--light-bg);
+    line-height: 1.6;
+    overflow-x: hidden; /* Evita el scroll horizontal */
+}
+
+/* Global Container */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 0;
+}
+html {
+    scroll-behavior: smooth;
+}
+h1, h2, h3, h4 {
+    font-family: 'Poppins', sans-serif; /* Fuente para títulos */
+    font-weight: 700;
+    color: var(--dark-text);
+}
+h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+
+/* --- 2. Estilos de Botones (Mejorados) --- */
+.btn {
+    padding: 12px 25px;
+    border-radius: 50px; /* Bordes más suaves (Pill shape) */
+    text-decoration: none;
+    font-weight: 600;
+    transition: all var(--transition-speed) ease; /* Transición universal */
+    display: inline-block;
+    border: 2px solid transparent;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+}
+.btn-primary:hover {
+    background-color: #145cb3;
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-light);
+}
+.btn-secondary {
+    background-color: transparent; 
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+.btn-secondary:hover {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-light);
+}
+
+
+/* ------------------------------------------------------------------ */
+/* --- 3. BARRA DE NAVEGACIÓN (Flotante y Transparente) --- */
+/* ------------------------------------------------------------------ */
+.navbar {
+    position: absolute; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.1); /* Ligeramente opaco */
+    backdrop-filter: blur(5px); /* Efecto cristal */
+    padding: 20px 0; /* Menos padding */
+    z-index: 1000;
+    transition: background-color var(--transition-speed) ease;
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px; /* Ajuste de padding para que no se vea vacío en bordes */
+    max-width: 1200px; 
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--light-text); /* Color claro para la nav sobre el hero */
+    text-decoration: none;
+}
+
+.nav-links a {
+    margin-left: 30px;
+    font-weight: 500;
+    color: var(--light-text);
+    text-decoration: none;
+    transition: color var(--transition-speed) ease;
+    opacity: 0.9;
+}
+
+.nav-links a:hover {
+    color: var(--accent-color); /* Acento al pasar el ratón */
+    opacity: 1;
+}
+
+
+/* --- 4. HERO SECTION (Mejorado) --- */
+.hero-section {
+    /* Imagen de fondo con overlay más oscuro para mejor contraste */
+    background: 
+        linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), 
+        url('https://picsum.photos/1920/1080?random=hero') no-repeat center center/cover;
+    
+    padding-top: 150px; /* Más espacio arriba */
+    padding-bottom: 120px; 
+    color: var(--light-text);
+    text-align: center;
+    min-height: 70vh; /* Asegura altura mínima */
+    display: flex;
+    align-items: center;
+}
+.hero-section h1 {
+    font-size: 4em;
+    margin-bottom: 25px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--light-text);
+}
+.hero-section .subtitle {
+    font-size: 1.4em;
+    margin-bottom: 50px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 300;
+}
+
+
+/* --- 5. SECCIÓN DE ANÁLISIS DE GITHUB (Refinado) --- */
+
+.github-analysis-section {
+    padding: 80px 0;
+    background-color: var(--dark-bg); 
+    color: var(--light-text);
+    text-align: center;
+}
+
+.github-analysis-section h2 {
+    color: var(--accent-color); /* Título con color de acento */
+}
+
+.github-analysis-section .subtitle {
+    color: var(--secondary-color);
+    margin-bottom: 50px;
+}
+
+.analysis-flex-container {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: space-around;
+    align-items: center;
+    gap: 50px;
+    margin-top: 30px;
+}
+
+.bar-chart-wrapper {
+    flex: 2; /* Ocupa más espacio */
+    min-width: 300px;
+}
+
+.pie-chart-wrapper {
+    flex: 1; /* Ocupa menos espacio */
+    display: flex;
+    flex-direction: column; /* Cambiado para apilar leyenda y torta */
+    align-items: center;
+    gap: 30px;
+}
+
+/* Estilos de la Barra */
+.language-bar-container {
+    display: flex;
+    width: 100%;
+    height: 25px; /* Barra más delgada */
+    border-radius: 12px;
+    overflow: hidden; 
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.4); /* Sombra interior */
+    margin: 20px auto;
+}
+
+.language-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white; 
+    font-weight: 500;
+    font-size: 0.8rem;
+    padding: 0 8px;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.8);
+    transition: width 1s ease-out;
+}
+
+/* Estilos del Gráfico de Torta (Estático) - Refinado */
+.pie-chart.static-pie {
+    width: 180px; /* Torta ligeramente más pequeña */
+    height: 180px;
+    border-radius: 50%;
+    box-shadow: var(--shadow-heavy); /* Sombra marcada */
+    border: 5px solid var(--dark-bg); /* Borde para levantarla del fondo */
+    
+    /* Colores estáticos - Debes asegurarte de que estén aquí si usas HTML estático */
+    background: conic-gradient(
+        #3572A5 0% 45%,      /* Python */
+        #f1e05a 45% 75%,     /* JavaScript */
+        #e34c26 75% 90%,     /* HTML/CSS */
+        #e38200 90% 100%     /* SQL */
+    );
+}
+
+/* Estilos de Leyenda */
+.legend {
+    text-align: left;
+    font-size: 0.95rem;
+    padding: 10px;
+    background-color: #2a3440; /* Fondo sutil para la leyenda */
+    border-radius: 8px;
+}
+
+.legend-item {
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap; /* Evita que los porcentajes se rompan */
+}
+
+.legend-item span {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Colores estáticos para los puntos de la leyenda */
+.python-dot { background-color: #3572A5; }
+.js-dot { background-color: #f1e05a; }
+.html-css-dot { background-color: #e34c26; }
+.sql-dot { background-color: #e38200; }
+
+.legend-note {
+    font-size: 0.75rem;
+    color: var(--secondary-color);
+    margin-top: 20px;
+}
+
+/* --- 6. CASE STUDIES (Portafolio) --- */
+.case-studies-section {
+    padding: 80px 0;
+    text-align: center;
+    background-color: var(--light-bg);
+}
+.case-study-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
+}
+.case-card {
+    background-color: var(--card-bg);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-light); /* Sombra más suave */
+    text-align: left;
+    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+    border-left: 5px solid var(--primary-color); /* Detalle de color */
+}
+.case-card:hover {
+    box-shadow: var(--shadow-heavy);
+    transform: translateY(-5px); /* Efecto 3D al pasar el ratón */
+}
+.case-card h3 {
+    color: var(--primary-color);
+    margin-top: 0;
+}
+.case-card .nicho {
+    color: var(--accent-color);
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+/* --- 7. EVENTOS (CTA) --- */
+.events-promo-section {
+    background-color: #ff9800; /* Naranja/Ámbar */
+    color: var(--dark-text); 
+    padding: 60px 0;
+    text-align: center;
+}
+.events-promo-section h2 {
+    color: var(--dark-text);
+    margin-top: 0;
+    font-size: 2.2em;
+}
+.events-promo-section .btn-cta {
+    background-color: var(--dark-bg); 
+    color: var(--light-text);
+    font-size: 1.1em;
+    padding: 15px 40px;
+    margin-top: 30px;
+}
+.events-promo-section .btn-cta:hover {
+    background-color: #111;
+    transform: translateY(-4px);
+}
+
+/* --- 8. SERVICES --- */
+.services-section {
+    background-color: var(--card-bg);
+    padding: 80px 0;
+    text-align: center;
+}
+.services-grid {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 50px;
+}
+.service-item {
+    flex-basis: 40%;
+    padding: 30px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    text-align: left;
+    transition: box-shadow var(--transition-speed) ease;
+}
+.service-item:hover {
+    box-shadow: var(--shadow-light);
+}
+.service-item h3 {
+    color: var(--primary-color);
+}
+
+/* --- 9. CONTACTO --- */
+.contact-section {
+    padding: 50px 0; 
+    background-color: var(--light-bg);
+}
+
+/* --- 10. FOOTER --- */
+footer {
+    background-color: #111827; /* Gris muy oscuro, casi negro */
+    color: #bbb;
+    text-align: center;
+    padding: 30px 0;
+    font-size: 0.9em;
+}
+footer a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color var(--transition-speed) ease;
+}
+footer a:hover {
+    color: var(--primary-color);
+}
+
+
+/* --- 11. Media Queries (Responsiveness) --- */
+@media (max-width: 900px) {
+    .services-grid {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .hero-section h1 {
+        font-size: 3em;
+    }
+}
+@media (max-width: 768px) {
+    /* Ajuste del layout de GitHub */
+    .analysis-flex-container {
+        flex-direction: column;
+    }
+    .pie-chart-wrapper {
+        flex-direction: row; /* La leyenda al lado de la torta en tablets */
+        gap: 20px;
+    }
+}
+@media (max-width: 600px) {
+    .hero-section h1 {
+        font-size: 2.2em;
+    }
+    .navbar {
+        /* Se vuelve sólido y pegajoso en móviles */
+        background-color: var(--dark-bg); 
+        position: sticky; 
+        padding: 15px 0;
+    }
+    .navbar .container {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .nav-links a {
+        margin: 5px 10px; 
+        font-size: 0.9rem;
+    }
+    .hero-section {
+        padding-top: 80px; 
+    }
+}

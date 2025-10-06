@@ -1,0 +1,19 @@
+# ----------------------------------
+# Entorno virtual y caché de Python
+# ----------------------------------
+venv/
+__pycache__/
+*.pyc
+
+# ----------------------------------
+# Archivos de Django y BBDD
+# ----------------------------------
+db.sqlite3
+/media
+/static
+
+# ----------------------------------
+# Seguridad: Variables de Entorno
+# ----------------------------------
+# ¡CRUCIAL! Excluye el archivo que contiene tu token real.
+.env
