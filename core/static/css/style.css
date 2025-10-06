@@ -508,6 +508,93 @@ footer a:hover {
         margin-bottom: 30px;
     }
 }
+.case-study-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 3 columnas en escritorio, se ajusta */
+    gap: 30px; /* Espacio entre las tarjetas */
+    margin-top: 40px;
+}
+
+.project-card {
+    background-color: #ffffff;
+    border-radius: 12px; /* Bordes más suaves */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Sombra elegante */
+    padding: 25px;
+    display: flex; /* Para organizar el contenido internamente */
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transición suave al pasar el ratón */
+    text-decoration: none; /* Quita el subrayado del enlace */
+    color: #333; /* Color de texto base */
+}
+
+.project-card:hover {
+    transform: translateY(-8px); /* Efecto de "levantar" al pasar el ratón */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
+}
+
+.project-card .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.project-card h3 {
+    font-size: 1.5rem;
+    color: #007bff; /* Color distintivo para el título */
+    margin: 0; /* Elimina márgenes extra */
+    flex-grow: 1; /* Permite que el título ocupe el espacio disponible */
+}
+
+.project-card .language-tag {
+    font-size: 0.85rem;
+    color: white; /* Texto blanco para que contraste con el fondo de color */
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-left: 15px; /* Espacio entre el título y el tag */
+    font-weight: bold;
+    text-transform: uppercase;
+    white-space: nowrap; /* Evita que el tag se rompa en varias líneas */
+}
+
+.project-card .project-description {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 20px; /* Espacio antes del footer */
+    flex-grow: 1; /* Permite que la descripción ocupe el espacio */
+}
+
+.project-card .card-footer {
+    font-size: 0.8rem;
+    color: #888;
+    text-align: right;
+}
+
+
+/* ======================================================= */
+/* MEDIA QUERY para Móviles (Ajuste de las tarjetas) */
+/* ======================================================= */
+@media (max-width: 768px) {
+    .case-study-grid {
+        grid-template-columns: 1fr; /* Una sola columna en móvil */
+        gap: 20px; /* Menos espacio entre tarjetas */
+    }
+
+    .project-card {
+        padding: 20px; /* Reducir padding en móvil */
+    }
+
+    .project-card h3 {
+        font-size: 1.3rem; /* Títulos más pequeños en móvil */
+    }
+
+    .project-card .language-tag {
+        font-size: 0.75rem; /* Tag más pequeño en móvil */
+        padding: 4px 8px;
+    }
+}
 @media (max-width: 600px) {
     .hero-section h1 {
         font-size: 2.2em;

@@ -71,33 +71,41 @@
         </div>
     </section>
     <section class="case-studies-section" id="portafolio">
-        <div class="container">
-            <h2 class="text-center" data-aos="fade-up">Proyectos Destacados (Pinned)</h2>
+    <div class="container">
+        <h2 class="text-center" data-aos="fade-up">Proyectos Destacados (Pinned)</h2>
+        
+        <div class="case-study-grid">
             
-            <div class="case-study-grid">
-                
-                {% for repo in featured_repos %}
-                <a href="{{ repo.html_url }}" target="_blank" class="case-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 | stringformat:'i' }}00">
-                    
+            {% for repo in featured_repos %}
+            <a href="{{ repo.html_url }}" target="_blank" class="project-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 | stringformat:'i' }}00">
+                <div class="card-header">
                     <h3>{{ repo.name }}</h3>
-                    
-                    <p class="nicho" style="color: {{ repo.language | get_language_color_filter }};">
+                    <span class="language-tag" style="background-color: {{ repo.language | get_language_color_filter }};">
                         {{ repo.language }}
-                    </p>
-                    
-                    <p>{{ repo.description }}</p>
-
-                    <small>Última actualización: {{ repo.updated_at|date:"d M Y" }}</small>
-                </a>
-                {% empty %}
-                <div style="grid-column: 1 / -1; text-align: center;">
-                    <p>No se pudieron cargar los proyectos destacados de GitHub. Por favor, revisa tu Token de Acceso Personal o la lista de repositorios fijados en 'views.py'.</p>
+                    </span>
                 </div>
-                {% endfor %}
+                
+                <p class="project-description">
+                    {% if repo.description %}
+                        {{ repo.description }}
+                    {% else %}
+                        No hay descripción disponible.
+                    {% endif %}
+                </p>
 
+                <div class="card-footer">
+                    <small>Última actualización: {% if repo.updated_at %}{{ repo.updated_at|date:"d M Y" }}{% else %}N/A{% endif %}</small>
+                </div>
+            </a>
+            {% empty %}
+            <div style="grid-column: 1 / -1; text-align: center;">
+                <p>No se pudieron cargar los proyectos destacados de GitHub. Por favor, revisa tu Token de Acceso Personal o la lista de repositorios fijados en 'views.py'.</p>
             </div>
+            {% endfor %}
+
         </div>
-    </section>
+    </div>
+</section>
 
     <section class="events-promo-section" id="eventos" data-aos="flip-up">
         <div class="container text-center">
