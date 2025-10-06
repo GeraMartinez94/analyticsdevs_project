@@ -590,10 +590,21 @@ footer a:hover {
         font-size: 1.3rem; /* Títulos más pequeños en móvil */
     }
 
-    .project-card .language-tag {
-        font-size: 0.75rem; /* Tag más pequeño en móvil */
-        padding: 4px 8px;
-    }
+  .project-card .language-tag {
+    /* ... otros estilos ... */
+    color: white !important; /* Fuerza el texto blanco para contrastar con el fondo de color */
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+/* Opcional: Si quieres un look más suave para el tag */
+.project-card .language-tag[style*="background-color: #f"] { 
+    /* Si el color de GitHub es muy claro (ej: HTML), usa texto oscuro */
+    color: #333 !important; 
+}
 }
 @media (max-width: 600px) {
     .hero-section h1 {
