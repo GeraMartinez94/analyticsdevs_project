@@ -1,53 +1,52 @@
 /* ================================================================= */
-/* style.css - Versión Mejorada y Profesional               */
+/* style.css - Versión Unificada y Refinada (Ajuste Final de Tarjetas) */
 /* ================================================================= */
 
 /* --- 0. Variables (Color Palette y Tipografía) --- */
 :root {
-    /* Colores Principales (Más elegantes) */
-    --primary-color: #1a73e8;       /* Azul de Google/Moderno */
+    /* Colores Principales */
+    --primary-color: #1a73e8;       /* Azul Moderno */
     --secondary-color: #6c757d;     /* Gris para texto secundario */
-    --accent-color: #00bfa5;        /* Verde Esmeralda para acentos visuales */
+    --accent-color: #00bfa5;        /* Verde Esmeralda para acentos */
     
     /* Fondo y Texto */
-    --dark-bg: #1f2833;             /* Gris muy oscuro/Azul medianoche */
-    --light-bg: #f5f5f5;            /* Gris muy claro */
+    --dark-bg: #1f2833;             /* Gris oscuro/Azul medianoche */
+    --light-bg: #f5f5f5;            /* Gris muy claro, mejor para secciones */
+    --card-bg: #ffffff;             /* Fondo de tarjetas */
     --light-text: #ffffff;
     --dark-text: #333333;
     
-    /* Sombras y Componentes */
-    --card-bg: #ffffff;
-    --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.1);
-    --shadow-heavy: 0 10px 30px rgba(0, 0, 0, 0.2);
-
-    /* Transiciones */
+    /* Sombras y Transiciones */
+    --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.08); /* Sombra elegante */
+    --shadow-heavy: 0 10px 30px rgba(0, 0, 0, 0.15); /* Sombra al pasar el mouse */
     --transition-speed: 0.3s;
 }
 
 /* --- 1. Base y Reset --- */
 body {
-    /* Fuente de reserva moderna */
     font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
     margin: 0;
     padding: 0;
     color: var(--dark-text); 
     background-color: var(--light-bg);
     line-height: 1.6;
-    overflow-x: hidden; /* Evita el scroll horizontal */
-}
-
-/* Global Container */
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 0;
+    overflow-x: hidden; 
 }
 html {
     scroll-behavior: smooth;
 }
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 15px; /* Padding vertical por defecto */
+}
+/* Reajuste de padding para el contenedor en secciones */
+section .container {
+    padding: 40px 15px;
+}
 h1, h2, h3, h4 {
-    font-family: 'Poppins', sans-serif; /* Fuente para títulos */
+    font-family: 'Poppins', sans-serif;
     font-weight: 700;
     color: var(--dark-text);
 }
@@ -55,21 +54,24 @@ h2 {
     font-size: 2.5rem;
     margin-bottom: 20px;
 }
+.subtitle {
+    color: var(--secondary-color);
+}
 
 
-/* --- 2. Estilos de Botones (Mejorados) --- */
+/* --- 2. Estilos de Botones --- */
 .btn {
     padding: 12px 25px;
-    border-radius: 50px; /* Bordes más suaves (Pill shape) */
+    border-radius: 50px;
     text-decoration: none;
     font-weight: 600;
-    transition: all var(--transition-speed) ease; /* Transición universal */
+    transition: all var(--transition-speed) ease;
     display: inline-block;
     border: 2px solid transparent;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    line-height: 1; 
 }
-
 .btn-primary {
     background-color: var(--primary-color);
     color: var(--light-text);
@@ -79,49 +81,45 @@ h2 {
     transform: translateY(-3px);
     box-shadow: var(--shadow-light);
 }
-.btn-secondary {
-    background-color: transparent; 
-    color: var(--primary-color);
-    border-color: var(--primary-color);
-}
-.btn-secondary:hover {
-    background-color: var(--primary-color);
+.btn-cta {
+    background-color: var(--dark-bg); 
     color: var(--light-text);
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-light);
+    font-size: 1.1em;
+    padding: 15px 40px;
+    margin-top: 30px;
+}
+.btn-cta:hover {
+    background-color: #111;
+    transform: translateY(-4px);
 }
 
 
 /* ------------------------------------------------------------------ */
-/* --- 3. BARRA DE NAVEGACIÓN (Flotante y Transparente) --- */
+/* --- 3. BARRA DE NAVEGACIÓN --- */
 /* ------------------------------------------------------------------ */
 .navbar {
     position: absolute; 
     top: 0;
     left: 0;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.1); /* Ligeramente opaco */
-    backdrop-filter: blur(5px); /* Efecto cristal */
-    padding: 20px 0; /* Menos padding */
+    background-color: rgba(0, 0, 0, 0.1); 
+    backdrop-filter: blur(5px); 
+    padding: 20px 0;
     z-index: 1000;
     transition: background-color var(--transition-speed) ease;
 }
-
 .navbar .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 15px; /* Ajuste de padding para que no se vea vacío en bordes */
-    max-width: 1200px; 
+    padding: 0 15px;
 }
-
 .logo {
     font-size: 1.8rem;
     font-weight: 800;
-    color: var(--light-text); /* Color claro para la nav sobre el hero */
+    color: var(--light-text);
     text-decoration: none;
 }
-
 .nav-links a {
     margin-left: 30px;
     font-weight: 500;
@@ -130,96 +128,75 @@ h2 {
     transition: color var(--transition-speed) ease;
     opacity: 0.9;
 }
-
 .nav-links a:hover {
-    color: var(--accent-color); /* Acento al pasar el ratón */
+    color: var(--accent-color);
     opacity: 1;
 }
 
 
-/* --- 4. HERO SECTION (Mejorado) --- */
+/* --- 4. HERO SECTION --- */
 .hero-section {
-    /* Imagen de fondo con overlay más oscuro para mejor contraste */
     background: 
         linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), 
         url('https://picsum.photos/1920/1080?random=hero') no-repeat center center/cover;
-    
-    padding-top: 150px; /* Más espacio arriba */
+    padding-top: 150px; 
     padding-bottom: 120px; 
     color: var(--light-text);
     text-align: center;
-    min-height: 70vh; /* Asegura altura mínima */
+    min-height: 70vh; 
     display: flex;
     align-items: center;
 }
 .hero-section h1 {
     font-size: 4em;
-    margin-bottom: 25px;
-    font-weight: 800;
-    line-height: 1.1;
     color: var(--light-text);
 }
 .hero-section .subtitle {
     font-size: 1.4em;
-    margin-bottom: 50px;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
     font-weight: 300;
 }
 
 
-/* --- 5. SECCIÓN DE ANÁLISIS DE GITHUB (Refinado) --- */
-
+/* --- 5. SECCIÓN DE ANÁLISIS DE GITHUB --- */
 .github-analysis-section {
     padding: 80px 0;
     background-color: var(--dark-bg); 
     color: var(--light-text);
     text-align: center;
 }
-
 .github-analysis-section h2 {
-    color: var(--accent-color); /* Título con color de acento */
+    color: var(--accent-color);
 }
-
 .github-analysis-section .subtitle {
     color: var(--secondary-color);
-    margin-bottom: 50px;
 }
-
 .analysis-flex-container {
     display: flex;
     flex-wrap: wrap; 
     justify-content: space-around;
-    align-items: center;
     gap: 50px;
     margin-top: 30px;
 }
-
 .bar-chart-wrapper {
-    flex: 2; /* Ocupa más espacio */
+    flex: 2; 
     min-width: 300px;
 }
-
 .pie-chart-wrapper {
-    flex: 1; /* Ocupa menos espacio */
+    flex: 1; 
     display: flex;
-    flex-direction: column; /* Cambiado para apilar leyenda y torta */
+    flex-direction: column; 
     align-items: center;
     gap: 30px;
 }
-
-/* Estilos de la Barra */
 .language-bar-container {
     display: flex;
     width: 100%;
-    height: 25px; /* Barra más delgada */
+    height: 25px;
     border-radius: 12px;
     overflow: hidden; 
-    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.4); /* Sombra interior */
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.4); 
     margin: 20px auto;
 }
-
 .language-bar {
     display: flex;
     align-items: center;
@@ -231,40 +208,26 @@ h2 {
     text-shadow: 0 0 2px rgba(0, 0, 0, 0.8);
     transition: width 1s ease-out;
 }
-
-/* Estilos del Gráfico de Torta (Estático) - Refinado */
-.pie-chart.static-pie {
-    width: 180px; /* Torta ligeramente más pequeña */
+.pie-chart {
+    width: 180px;
     height: 180px;
     border-radius: 50%;
-    box-shadow: var(--shadow-heavy); /* Sombra marcada */
-    border: 5px solid var(--dark-bg); /* Borde para levantarla del fondo */
-    
-    /* Colores estáticos - Debes asegurarte de que estén aquí si usas HTML estático */
-    background: conic-gradient(
-        #3572A5 0% 45%,      /* Python */
-        #f1e05a 45% 75%,     /* JavaScript */
-        #e34c26 75% 90%,     /* HTML/CSS */
-        #e38200 90% 100%     /* SQL */
-    );
+    box-shadow: var(--shadow-heavy);
+    border: 5px solid var(--dark-bg);
 }
-
-/* Estilos de Leyenda */
 .legend {
     text-align: left;
     font-size: 0.95rem;
-    padding: 10px;
-    background-color: #2a3440; /* Fondo sutil para la leyenda */
+    padding: 15px; 
+    background-color: #2a3440; 
     border-radius: 8px;
 }
-
 .legend-item {
     margin-bottom: 5px;
     display: flex;
     align-items: center;
-    white-space: nowrap; /* Evita que los porcentajes se rompan */
+    white-space: nowrap;
 }
-
 .legend-item span {
     display: inline-block;
     width: 12px;
@@ -273,20 +236,16 @@ h2 {
     margin-right: 10px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
-
-/* Colores estáticos para los puntos de la leyenda */
-.python-dot { background-color: #3572A5; }
-.js-dot { background-color: #f1e05a; }
-.html-css-dot { background-color: #e34c26; }
-.sql-dot { background-color: #e38200; }
-
 .legend-note {
     font-size: 0.75rem;
     color: var(--secondary-color);
     margin-top: 20px;
 }
 
-/* --- 6. CASE STUDIES (Portafolio) --- */
+
+/* ------------------------------------------------------------------ */
+/* --- 6. CASE STUDIES (Portafolio) - AJUSTES DE ANCHO COMPLETO --- */
+/* ------------------------------------------------------------------ */
 .case-studies-section {
     padding: 80px 0;
     text-align: center;
@@ -294,56 +253,91 @@ h2 {
 }
 .case-study-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 30px;
-    margin-top: 50px;
+    margin-top: 40px;
 }
-.case-card {
+
+.project-card {
     background-color: var(--card-bg);
-    padding: 30px;
     border-radius: 12px;
-    box-shadow: var(--shadow-light); /* Sombra más suave */
-    text-align: left;
+    box-shadow: var(--shadow-light); 
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-    border-left: 5px solid var(--primary-color); /* Detalle de color */
+    text-decoration: none; 
+    color: var(--dark-text);
+    min-height: 170px; 
 }
-.case-card:hover {
+.project-card:hover {
+    transform: translateY(-8px); 
     box-shadow: var(--shadow-heavy);
-    transform: translateY(-5px); /* Efecto 3D al pasar el ratón */
 }
-.case-card h3 {
-    color: var(--primary-color);
-    margin-top: 0;
+
+/* Modificación para apilar y centrar el header */
+.project-card .card-header {
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center; 
+    margin-bottom: 15px;
+    padding-top: 10px; 
 }
-.case-card .nicho {
-    color: var(--accent-color);
-    font-size: 0.9em;
-    font-weight: 600;
-    margin-bottom: 10px;
+
+/* Título centrado y ocupa el ancho */
+.project-card .project-title-link { 
+    font-size: 1.35rem;
+    color: #007bff; 
+    margin: 0 0 10px 0; 
+    flex-grow: 1;
+    text-align: center; 
+    width: 100%;
 }
+
+/* Badge de Lenguaje modificado para ocupar el ancho completo */
+.project-card .language-badge {
+    display: block; /* Vuelve el span un bloque */
+    width: 100%; /* Ocupa todo el ancho disponible */
+    font-size: 0.9rem; 
+    color: var(--light-text);
+    padding: 8px 10px; 
+    border-radius: 4px; 
+    margin: 0; /* Elimina márgenes laterales */
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center; /* Centra el texto del badge */
+}
+
+/* Descripción y Footer Centrados */
+.project-card .project-description {
+    font-size: 0.95rem;
+    color: var(--secondary-color);
+    line-height: 1.5;
+    margin-bottom: 20px;
+    flex-grow: 1;
+    min-height: 40px; 
+    text-align: center; /* Centrar la descripción */
+}
+
+.project-card .card-footer {
+    font-size: 0.8rem;
+    color: #888;
+    text-align: center; /* Centrar la fecha */
+}
+
 
 /* --- 7. EVENTOS (CTA) --- */
 .events-promo-section {
-    background-color: #ff9800; /* Naranja/Ámbar */
+    background-color: #ff9800; 
     color: var(--dark-text); 
     padding: 60px 0;
     text-align: center;
 }
 .events-promo-section h2 {
     color: var(--dark-text);
-    margin-top: 0;
     font-size: 2.2em;
-}
-.events-promo-section .btn-cta {
-    background-color: var(--dark-bg); 
-    color: var(--light-text);
-    font-size: 1.1em;
-    padding: 15px 40px;
-    margin-top: 30px;
-}
-.events-promo-section .btn-cta:hover {
-    background-color: #111;
-    transform: translateY(-4px);
 }
 
 /* --- 8. SERVICES --- */
@@ -359,7 +353,7 @@ h2 {
     margin-top: 50px;
 }
 .service-item {
-    flex-basis: 40%;
+    flex-basis: 45%; 
     padding: 30px;
     border: 1px solid #e0e0e0;
     border-radius: 12px;
@@ -381,245 +375,52 @@ h2 {
 
 /* --- 10. FOOTER --- */
 footer {
-    background-color: #111827; /* Gris muy oscuro, casi negro */
+    background-color: #111827;
     color: #bbb;
     text-align: center;
     padding: 30px 0;
     font-size: 0.9em;
 }
-footer a {
-    color: var(--accent-color);
-    text-decoration: none;
-    transition: color var(--transition-speed) ease;
-}
-footer a:hover {
-    color: var(--primary-color);
-}
 
 
-/* --- 11. Media Queries (Responsiveness) --- */
+/* ------------------------------------------------------------------ */
+/* --- 11. MEDIA QUERIES (Responsiveness Consolidado) --- */
+/* ------------------------------------------------------------------ */
+
 @media (max-width: 900px) {
     .services-grid {
         flex-direction: column;
         gap: 20px;
     }
-    .hero-section h1 {
-        font-size: 3em;
-    }
-}
-@media (max-width: 768px) {
-    /* Ajuste del layout de GitHub */
-    .analysis-flex-container {
-        flex-direction: column;
-    }
-    .pie-chart-wrapper {
-        flex-direction: row; /* La leyenda al lado de la torta en tablets */
-        gap: 20px;
-    }
-}
-/* ======================================================= */
-/* 1. CLASES DE ESTRUCTURA BASE (Asegurar que los contenedores se ajusten) */
-/* ======================================================= */
-.container {
-    width: 90%; /* Ajusta el ancho para que siempre haya un margen en móvil */
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0 15px; /* Pequeño padding lateral */
-}
-
-
-/* ======================================================= */
-/* 2. MEDIA QUERY: TELÉFONOS MÓVILES (Ancho máximo 768px) */
-/* Aplica estos estilos cuando la pantalla sea MÁS PEQUEÑA que 768px */
-/* ======================================================= */
-@media (max-width: 768px) {
-    
-    /* ---- A. NAVEGACIÓN (Navbar) ---- */
-    .navbar .container {
-        flex-direction: column; /* Apila el logo y los links */
-        align-items: flex-start;
-    }
-
-    /* Ocultar los links por defecto en móvil y mostrarlos apilados */
-    .navbar .nav-links {
-        display: none; /* Se recomienda usar JavaScript para alternar 'display: flex' */
-        width: 100%;
-        flex-direction: column;
-        text-align: left;
-    }
-    
-    /* Mostrar los enlaces del menú en línea en móvil si se usa JS/un botón */
-    .nav-links a {
-        display: block;
-        padding: 10px 0;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    /* Opcional: Si usas un botón de hamburguesa, este es el lugar para mostrarlo */
-    /* .menu-toggle { display: block; } */
-
-
-    /* ---- B. SECCIONES Y TÍTULOS ---- */
-    
-    /* Ajusta el padding de las secciones para dar más espacio vertical en móvil */
-    .hero-section, .github-analysis-section, .case-studies-section, .services-section {
-        padding: 40px 0;
-    }
-
-    /* Reduce el tamaño de fuente de los títulos principales */
-    h1 {
-        font-size: 2.5rem; 
-    }
-    
-    h2 {
-        font-size: 1.8rem;
-    }
-
-    /* ---- C. GRID/FLEX CONTAINERS (Apilar Columnas) ---- */
-    
-    /* El análisis de GitHub (Barras y Pie Chart) debe apilarse */
-    .analysis-flex-container {
-        flex-direction: column;
-    }
-    
-    /* La cuadrícula de Proyectos (Case Study Grid) debe apilarse */
-    .case-study-grid {
-        display: block; /* Desactiva el grid layout */
-    }
-
-    .case-card {
-        width: 100%; /* Las tarjetas ocupan el ancho completo */
-        margin-bottom: 20px;
-    }
-
-    /* La cuadrícula de Servicios debe apilarse */
-    .services-grid {
-        display: block; /* Desactiva el grid layout */
-    }
-    
     .service-item {
-        width: 100%;
-        margin-bottom: 15px;
+        flex-basis: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    
+    /* Global */
+    .container {
+        padding: 20px 15px;
+    }
+    h1 {
+        font-size: 2.8rem; 
+    }
+    h2 {
+        font-size: 2rem;
     }
     
-    /* Asegura que los gráficos se vean bien */
-    .bar-chart-wrapper, .pie-chart-wrapper {
-        width: 100%;
-        margin-bottom: 30px;
-    }
-}
-.case-study-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 3 columnas en escritorio, se ajusta */
-    gap: 30px; /* Espacio entre las tarjetas */
-    margin-top: 40px;
-}
-
-.project-card {
-    background-color: #ffffff;
-    border-radius: 12px; /* Bordes más suaves */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Sombra elegante */
-    padding: 25px;
-    display: flex; /* Para organizar el contenido internamente */
-    flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transición suave al pasar el ratón */
-    text-decoration: none; /* Quita el subrayado del enlace */
-    color: #333; /* Color de texto base */
-}
-
-.project-card:hover {
-    transform: translateY(-8px); /* Efecto de "levantar" al pasar el ratón */
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
-}
-
-.project-card .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.project-card h3 {
-    font-size: 1.5rem;
-    color: #007bff; /* Color distintivo para el título */
-    margin: 0; /* Elimina márgenes extra */
-    flex-grow: 1; /* Permite que el título ocupe el espacio disponible */
-}
-
-.project-card .language-tag {
-    font-size: 0.85rem;
-    color: white; /* Texto blanco para que contraste con el fondo de color */
-    padding: 5px 10px;
-    border-radius: 5px;
-    margin-left: 15px; /* Espacio entre el título y el tag */
-    font-weight: bold;
-    text-transform: uppercase;
-    white-space: nowrap; /* Evita que el tag se rompa en varias líneas */
-}
-
-.project-card .project-description {
-    font-size: 1rem;
-    color: #555;
-    line-height: 1.6;
-    margin-bottom: 20px; /* Espacio antes del footer */
-    flex-grow: 1; /* Permite que la descripción ocupe el espacio */
-}
-
-.project-card .card-footer {
-    font-size: 0.8rem;
-    color: #888;
-    text-align: right;
-}
-
-
-/* ======================================================= */
-/* MEDIA QUERY para Móviles (Ajuste de las tarjetas) */
-/* ======================================================= */
-@media (max-width: 768px) {
-    .case-study-grid {
-        grid-template-columns: 1fr; /* Una sola columna en móvil */
-        gap: 20px; /* Menos espacio entre tarjetas */
-    }
-
-    .project-card {
-        padding: 20px; /* Reducir padding en móvil */
-    }
-
-    .project-card h3 {
-        font-size: 1.3rem; /* Títulos más pequeños en móvil */
-    }
-
-  .project-card .language-tag {
-    /* ... otros estilos ... */
-    color: white !important; /* Fuerza el texto blanco para contrastar con el fondo de color */
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-weight: bold;
-    text-transform: uppercase;
-    white-space: nowrap;
-}
-
-/* Opcional: Si quieres un look más suave para el tag */
-.project-card .language-tag[style*="background-color: #f"] { 
-    /* Si el color de GitHub es muy claro (ej: HTML), usa texto oscuro */
-    color: #333 !important; 
-}
-}
-@media (max-width: 600px) {
-    .hero-section h1 {
-        font-size: 2.2em;
-    }
+    /* Navegación (Sticky en móvil) */
     .navbar {
-        /* Se vuelve sólido y pegajoso en móviles */
-        background-color: var(--dark-bg); 
+        background-color: var(--dark-bg);
         position: sticky; 
         padding: 15px 0;
+        top: 0;
     }
     .navbar .container {
         flex-direction: column;
+        align-items: center;
         gap: 10px;
-        text-align: center;
     }
     .nav-links {
         display: flex;
@@ -629,8 +430,32 @@ footer a:hover {
     .nav-links a {
         margin: 5px 10px; 
         font-size: 0.9rem;
+        color: var(--light-text);
     }
+    
+    /* Hero */
     .hero-section {
-        padding-top: 80px; 
+        padding-top: 100px; 
+        padding-bottom: 80px;
+        min-height: auto;
+    }
+    .hero-section h1 {
+        font-size: 2.5em;
+    }
+
+    /* GitHub Analysis */
+    .analysis-flex-container {
+        flex-direction: column;
+        gap: 30px;
+    }
+    .pie-chart-wrapper {
+        flex-direction: row; 
+        justify-content: center;
+    }
+    
+    /* Portafolio (Se apila) */
+    .case-study-grid {
+        grid-template-columns: 1fr; 
+        gap: 20px;
     }
 }

@@ -77,14 +77,14 @@
         <div class="case-study-grid">
             
             {% for repo in featured_repos %}
-            <a href="{{ repo.html_url }}" target="_blank" class="project-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 | stringformat:'i' }}00">
+            <a href="{{repo.html_url }}" target="_blank" class="project-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 | stringformat:'i' }}00">
                 <div class="card-header">
                     <h3>{{ repo.name }}</h3>
-                    <span class="language-tag" style="background-color: {{ repo.language | get_language_color_filter }};">
+                    
+                </div>
+                <span class="language-tag" style="background-color: {{ repo.language | get_language_color_filter }};">
                         {{ repo.language }}
                     </span>
-                </div>
-                
                 <p class="project-description">
                     {% if repo.description %}
                         {{ repo.description }}
@@ -94,6 +94,7 @@
                 </p>
 
                 <div class="card-footer">
+                    
                     <small>Última actualización: {% if repo.updated_at %}{{ repo.updated_at|date:"d M Y" }}{% else %}N/A{% endif %}</small>
                 </div>
             </a>
