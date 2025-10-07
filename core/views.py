@@ -9,7 +9,8 @@ from django.shortcuts import render
 # ====================================================================
 GITHUB_USERNAME = "GeraMartinez94"
 # Obtener el token de la variable de entorno GITHUB_PAT
-GITHUB_TOKEN = os.environ.get("GITHUB_PAT", "TOKEN_DE_SEGURIDAD_NULO") 
+# FORZANDO LA CONEXIÓN: Token directo
+GITHUB_TOKEN = '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'
 # ====================================================================
 
 # ... (El resto de tus funciones get_github_data y home_view permanecen iguales) ...
