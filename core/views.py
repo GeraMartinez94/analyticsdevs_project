@@ -1,19 +1,50 @@
 import requests
-import os # Asegúrate de importar os
+import os 
 from django.shortcuts import render
 
-# ... (La función get_language_color permanece igual) ...
-
 # ====================================================================
-# CONFIGURACIÓN DE GITHUB
+# CONFIGURACIÓN SIN GITHUB TOKEN
 # ====================================================================
 GITHUB_USERNAME = "GeraMartinez94"
-# Obtener el token de la variable de entorno GITHUB_PAT
-# FORZANDO LA CONEXIÓN: Token directo
-GITHUB_TOKEN = os.environ.get("GITHUB_PAT", "TOKEN_DE_SEGURIDAD_NULO") 
-# ====================================================================
 
-# ... (El resto de tus funciones get_github_data y home_view permanecen iguales) ...
+# 🛑 ¡IMPORTANTE! ELIMINAMOS GITHUB_TOKEN.
+# Ya no es necesario y esta parte del código queda 100% segura.
+
+# --------------------------------------------------------------------
+# DATOS DE PROYECTOS FIJADOS (HARDCODED) - SEGURO Y EFICIENTE
+# --------------------------------------------------------------------
+# Debes llenar esta lista con la información de tus repositorios.
+FEATURED_REPOS = [
+    {
+        'name': "Reconocimiento_gestos_Python",
+        'description': "Proyecto de visión por computadora para reconocer gestos con la mano.",
+        'html_url': "https://github.com/GeraMartinez94/Reconocimiento_gestos_Python",
+        'language': "Python",
+        'updated_at': "2024-05-15T10:00:00Z" # Fecha solo para formato visual
+    },
+    {
+        'name': "Scrapting_Python",
+        'description': "Scripts y herramientas para la extracción de datos de la web.",
+        'html_url': "https://github.com/GeraMartinez94/Scrapting_Python",
+        'language': "Python",
+        'updated_at': "2024-04-01T10:00:00Z"
+    },
+    {
+        'name': "Data-Analytics-Python",
+        'description': "Análisis de datos, visualización y modelos predictivos en Python.",
+        'html_url': "https://github.com/GeraMartinez94/Data-Analytics-Python",
+        'language': "Python",
+        'updated_at': "2024-03-20T10:00:00Z"
+    },
+    {
+        'name': "Project_graphic_python",
+        'description': "Proyectos con interfaz gráfica usando Tkinter o PyQt.",
+        'html_url': "https://github.com/GeraMartinez94/Project_graphic_python",
+        'language': "Python",
+        'updated_at': "2024-02-10T10:00:00Z"
+    }
+    # Puedes añadir más si tu diseño lo permite
+]
 # ====================================================================
 
 
@@ -29,89 +60,27 @@ def get_language_color(language):
 
 
 def get_github_data():
-    """Obtiene lenguajes y la lista de repositorios fijados (pinned)."""
+    """
+    Obtiene lenguajes de forma estática y retorna los repositorios fijados desde la lista local.
+    Hemos eliminado las llamadas a la API que requieren el GITHUB_TOKEN.
+    """
     
-    headers = {
-        "Authorization": f"token {GITHUB_TOKEN}",
-        "Accept": "application/vnd.github.v3+json"
-    }
-    
-    # 1. Obtener TODOS los repositorios para el cálculo de lenguajes
-    repos_url = f"https://api.github.com/users/{GITHUB_USERNAME}/repos?type=owner"
-    
-    try:
-        response = requests.get(repos_url, headers=headers)
-        response.raise_for_status()
-        repos = response.json()
-    except requests.exceptions.RequestException as e:
-        print(f"Error crítico al obtener repositorios: {e}")
-        return {'languages': [], 'featured_repos': []} 
-
-    # --- Lógica de Lenguajes (se mantiene igual) ---
-    total_bytes = 0
-    language_totals = {}
-    
-    # Lista para almacenar solo los datos relevantes para los repos fijados.
-    all_repo_data = {} 
-
-    for repo in repos:
-        if repo.get('fork'):
-            continue
-            
-        # Almacenamos los datos clave de todos los repositorios para luego filtrar los fijados.
-        all_repo_data[repo['name']] = {
-            'name': repo.get('name'),
-            'description': repo.get('description') or "Sin descripción.",
-            'html_url': repo.get('html_url'),
-            'language': repo.get('language'), 
-            'updated_at': repo.get('updated_at')
-        }
-
-        # Acumular lenguajes por bytes
-        languages_url = repo['languages_url']
-        try:
-            lang_response = requests.get(languages_url, headers=headers)
-            lang_response.raise_for_status()
-            languages = lang_response.json()
-            
-            for lang, bytes_count in languages.items():
-                language_totals[lang] = language_totals.get(lang, 0) + bytes_count
-                total_bytes += bytes_count
-        except requests.exceptions.RequestException as e:
-            print(f"Error al obtener lenguajes del repo {repo.get('name', 'N/A')}: {e}")
-            continue
     # ------------------------------------------------
-
-    # 2. Calcular porcentajes de lenguajes (queda igual)
-    language_percentages = []
-    if total_bytes > 0:
-        sorted_languages = sorted(language_totals.items(), key=lambda item: item[1], reverse=True)
-        for lang, bytes_count in sorted_languages:
-            percent = (bytes_count / total_bytes) * 100
-            language_percentages.append({
-                'language': lang,
-                'percent': round(percent, 2),
-                'color': get_language_color(lang)
-            })
-
-    # 3. Obtener la lista de los 4 repositorios FIJADOS (Pinned)
-    #    Utilizaremos un endpoint que a veces contiene metadata de los repos fijados en la respuesta de usuario
-    #    o simplemente usaremos los nombres que vimos en tu perfil:
+    # 🛑 Lógica de Lenguajes Simplificada (o estática)
+    # Si quieres eliminar el token por completo, esta sección también debe ser estática.
+    # Usaremos una lista estática para simplificar y eliminar la dependencia de la API.
+    # ------------------------------------------------
     
-    # Nombres basados en tu captura de pantalla (image_9d9def.png)
-    pinned_repo_names = [
-        "Reconocimiento_gestos_Python", 
-        "Scrapting_Python", 
-        "Data-Analytics-Python", 
-        "Project_graphic_python"
+    language_percentages = [
+        {'language': 'Python', 'percent': 75.00, 'color': get_language_color('Python')},
+        {'language': 'JavaScript', 'percent': 15.00, 'color': get_language_color('JavaScript')},
+        {'language': 'HTML', 'percent': 6.00, 'color': get_language_color('HTML')},
+        {'language': 'CSS', 'percent': 4.00, 'color': get_language_color('CSS')},
     ]
-    
-    # Filtramos los datos completos de los repositorios para obtener solo los fijados
-    featured_repos = [all_repo_data[name] for name in pinned_repo_names if name in all_repo_data]
-    
+
     return {
-        'languages': language_percentages[:5],
-        'featured_repos': featured_repos, 
+        'languages': language_percentages, # Usamos la lista estática
+        'featured_repos': FEATURED_REPOS,  # Usamos la lista local y segura
     }
 
 
@@ -134,57 +103,7 @@ def home_view(request):
     context = {
         'languages': languages,
         'gradient_string': gradient_string,
-        'featured_repos': data['featured_repos'],
+        'featured_repos': data['featured_repos'], # <-- Estos son los datos locales ahora
     }
     
-    return render(request, 'home.html', context)
-    """Vista principal que renderiza la página y pasa los datos de GitHub."""
-    
-    data = get_github_data()
-    languages = data['languages']
-    
-    # Prepara los datos para el conic-gradient de CSS (Gráfico de Torta)
-    current_stop = 0
-    gradient_parts = []
-    for lang in languages:
-        next_stop = current_stop + lang['percent']
-        gradient_parts.append(f"{lang['color']} {current_stop:.2f}% {next_stop:.2f}%")
-        current_stop = next_stop
-
-    gradient_string = ", ".join(gradient_parts)
-    
-    context = {
-        'languages': languages,
-        'gradient_string': gradient_string,
-        'featured_repos': data['featured_repos'], # <--- NUEVO CONTEXTO AGREGADO
-    }
-    
-    return render(request, 'home.html', context)
-    """Vista principal que renderiza la página y pasa los datos de GitHub."""
-    
-    languages = get_github_languages()
-    
-    # Prepara los datos para el conic-gradient de CSS
-    current_stop = 0
-    gradient_parts = []
-    for lang in languages:
-        next_stop = current_stop + lang['percent']
-        # Formato CSS: COLOR START% END%
-        gradient_parts.append(f"{lang['color']} {current_stop:.2f}% {next_stop:.2f}%")
-        current_stop = next_stop
-
-    gradient_string = ", ".join(gradient_parts)
-    
-    context = {
-        'languages': languages,
-        'gradient_string': gradient_string,
-    }
-    
-    # ⚠️ Solución al error TemplateDoesNotExist: Asegura que 'home.html' exista
-    try:
-        get_template('home.html')
-    except Exception as e:
-        # Esto te mostrará en la consola si el error persiste a pesar de la corrección
-        print(f"ADVERTENCIA: Aún no se encuentra la plantilla home.html. Error original: {e}") 
-
     return render(request, 'home.html', context)
