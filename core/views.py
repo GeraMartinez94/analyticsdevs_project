@@ -2,18 +2,9 @@ import requests
 import os 
 from django.shortcuts import render
 
-# ====================================================================
-# CONFIGURACIÓN SIN GITHUB TOKEN
-# ====================================================================
 GITHUB_USERNAME = "GeraMartinez94"
 
-# 🛑 ¡IMPORTANTE! ELIMINAMOS GITHUB_TOKEN.
-# Ya no es necesario y esta parte del código queda 100% segura.
 
-# --------------------------------------------------------------------
-# DATOS DE PROYECTOS FIJADOS (HARDCODED) - SEGURO Y EFICIENTE
-# --------------------------------------------------------------------
-# Debes llenar esta lista con la información de tus repositorios.
 FEATURED_REPOS = [
     {
         'name': "Reconocimiento_gestos_Python",
@@ -43,9 +34,7 @@ FEATURED_REPOS = [
         'language': "Python",
         'updated_at': "2024-02-10T10:00:00Z"
     }
-    # Puedes añadir más si tu diseño lo permite
 ]
-# ====================================================================
 
 
 def get_language_color(language):
@@ -65,12 +54,7 @@ def get_github_data():
     Hemos eliminado las llamadas a la API que requieren el GITHUB_TOKEN.
     """
     
-    # ------------------------------------------------
-    # 🛑 Lógica de Lenguajes Simplificada (o estática)
-    # Si quieres eliminar el token por completo, esta sección también debe ser estática.
-    # Usaremos una lista estática para simplificar y eliminar la dependencia de la API.
-    # ------------------------------------------------
-    
+
     language_percentages = [
         {'language': 'Python', 'percent': 75.00, 'color': get_language_color('Python')},
         {'language': 'JavaScript', 'percent': 15.00, 'color': get_language_color('JavaScript')},
