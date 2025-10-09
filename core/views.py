@@ -33,8 +33,20 @@ FEATURED_REPOS = [
         'html_url': "https://github.com/GeraMartinez94/Project_graphic_python",
         'language': "Python",
         'updated_at': "2024-02-10T10:00:00Z"
+    },
+      {
+        'name': "analyticsdevs_project", # El nombre del repositorio
+        'description': "El portafolio dinámico con Django, PythonAnywhere y GitHub.",
+        'html_url': "https://github.com/GeraMartinez94/analyticsdevs_project",
+        'language': "Python",
+        'updated_at': "2025-10-07T10:00:00Z" # Usa la fecha actual
     }
 ]
+
+def contacto_view(request):
+    # Por ahora, solo renderiza la plantilla contacto.html
+    # Más adelante, aquí irá la lógica de tu formulario de contacto
+    return render(request, 'core/contacto.html', {}) 
 
 
 def get_language_color(language):

@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agenda tu Charla de 15 Minutos - AnalyticsDevs</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  </head>
+  <body>
+    <nav class="navbar navbar-internal">
+      <div class="container">
+        <a href="{% url 'home' %}" class="logo">AnalyticsDevs</a>
+        <div class="nav-links">
+          <a href="{% url 'home' %}#portafolio">Portafolio</a>
+          <a href="{% url 'home' %}#eventos">Eventos</a>
+          <a href="{% url 'home' %}#servicios">Servicios</a>
+          <a href="{% url 'contacto' %}">Contacto</a>
+        </div>
+      </div>
+    </nav>
+
+    <section id="agendamiento" class="contact-section py-5">
+      <div class="container text-center py-5">
+        
+        <h2 class="title-accent-line mb-4">Agenda tu Charla de 15 Minutos</h2>
+        
+        <p class="lead mb-5">
+            Agenda una reunión con nosotros para asegurar tu cupo en el evento o resolver cualquier duda.
+        </p>
+
+        <div class="d-flex justify-content-center flex-column align-items-center mb-5">
+            
+            <a 
+                href="https://calendly.com/geramartinez450/nueva-reunion" 
+                target="_blank" 
+                class="btn btn-primary btn-cta-big mb-3"
+            >
+                Agendar Charla de 15 Minutos
+            </a>
+            
+            <p class="mt-3">
+                O contáctanos por otros medios:
+            </p>
+
+            <a 
+                href="mailto:tu.correo.contacto@ejemplo.com" 
+                class="text-primary mb-2 d-block"
+            >
+                <i class="fas fa-envelope me-2"></i> tu.correo.contacto@ejemplo.com
+            </a>
+
+            <a 
+                href="[TU ENLACE DE LINKEDIN AQUÍ]" 
+                target="_blank" 
+                class="text-secondary d-block"
+            >
+                <i class="fab fa-linkedin me-2"></i> Contactar por LinkedIn
+            </a>
+        </div>
+        
+        <a href="{% url 'home' %}" class="btn btn-secondary mt-5">Volver al Inicio</a>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2025 AnalyticsDevs. Todos los derechos reservados.</p>
+      </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        duration: 800,
+        once: true,
+      });
+    </script>
+  </body>
+</html>

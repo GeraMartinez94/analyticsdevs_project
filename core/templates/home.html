@@ -10,9 +10,19 @@
     
     <link rel="stylesheet" href="{% static 'css/style.css' %}"> 
     
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
+
+    <div class="message-container">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
 
     <nav class="navbar">
         <div class="container">
@@ -29,7 +39,7 @@
     <section class="hero-section" id="inicio"> 
         <div class="container" data-aos="fade-up" data-aos-duration="1200">
             <div class="hero-content">
-                <h1 data-aos="fade-up">Analítica y Desarrollo de Software</h1>
+                <h1 data-aos="fade-up" class="title-accent-line">Analítica y Desarrollo de Software</h1>
                 <p class="subtitle" data-aos="fade-up" data-aos-delay="300">Transformando datos en soluciones inteligentes con Python y Django.</p>
                 <a href="#portafolio" class="btn btn-primary" data-aos="zoom-in" data-aos-delay="500">Ver Proyectos</a>
             </div>
@@ -38,7 +48,7 @@
 
     <section class="github-analysis-section">
         <div class="container text-center">
-            <h2 data-aos="fade-down">Tecnologías Principales en GitHub</h2>
+            <h2 data-aos="fade-down" class="title-accent-line">Tecnologías Principales en GitHub</h2>
             <p class="subtitle" data-aos="fade-down" data-aos-delay="200">Análisis dinámico del stack tecnológico de mis proyectos públicos.</p>
 
             <div class="analysis-flex-container">
@@ -70,9 +80,10 @@
             <p class="legend-note">Datos obtenidos directamente de la API de GitHub.</p>
         </div>
     </section>
+    
     <section class="case-studies-section" id="portafolio">
     <div class="container">
-        <h2 class="text-center" data-aos="fade-up">Proyectos Destacados (Pinned)</h2>
+        <h2 class="text-center title-accent-line" data-aos="fade-up">Proyectos Destacados</h2> 
         
         <div class="case-study-grid">
             
@@ -83,8 +94,8 @@
                     
                 </div>
                 <span class="language-tag" style="background-color: {{ repo.language | get_language_color_filter }};">
-                        {{ repo.language }}
-                    </span>
+                            {{ repo.language }}
+                        </span>
                 <p class="project-description">
                     {% if repo.description %}
                         {{ repo.description }}
@@ -108,22 +119,91 @@
     </div>
 </section>
 
-    <section class="events-promo-section" id="eventos" data-aos="flip-up">
-        <div class="container text-center">
-            <h2>Próximos Eventos y Webinars</h2>
-            <a href="#" class="btn btn-cta">¡Regístrate!</a>
+    <section class="events-section" id="eventos">
+        <div class="container">
+            <h2 class="section-title text-center title-accent-line" data-aos="fade-down">Próximos Eventos y Webinars</h2>
+
+            <div class="event-grid">
+
+                <div class="event-card-item" data-aos="fade-up">
+                    <div class="card-header-event header-python">
+                        PYTHON & IA
+                    </div>
+
+                    <div class="card-body-event">
+                        <h3 class="card-title-event">Debate: El Futuro de Python en Analítica</h3>
+                        
+                        <p class="card-description-event">
+                            Analizaremos las tendencias de librerías como Pandas, Polars y la integración con Inteligencia Artificial. Ideal para desarrolladores y analistas de datos.
+                        </p>
+
+                        <div class="card-footer-event">
+                            <p class="event-meta-date">
+                                <i class="fas fa-calendar-alt"></i> A definir
+                            </p>
+
+                            <div class="calendar-add-links"> 
+                                <span class="status-message">En Desarrollo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="event-card-item" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card-header-event header-data-viz">
+                        DATA VIZ
+                    </div>
+
+                    <div class="card-body-event">
+                        <h3 class="card-title-event">Webinar: Visualización Avanzada en Python</h3>
+                        
+                        <p class="card-description-event">
+                            Aprende a crear gráficos interactivos y estéticamente superiores usando Matplotlib, Seaborn y Plotly. Transforma datos crudos en historias visuales impactantes.
+                        </p>
+
+                        <div class="card-footer-event">
+                            <p class="event-meta-date">
+                                <i class="fas fa-calendar-alt"></i> A definir
+                            </p>
+                            <span class="status-message">En Desarrollo</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="event-card-item" data-aos="fade-up" data-aos-delay="400">
+                    <div class="card-header-event header-django">
+                        DJANGO
+                    </div>
+
+                    <div class="card-body-event">
+                        <h3 class="card-title-event">Workshop: Fundamentos de Django para Analistas</h3>
+                        
+                        <p class="card-description-event">
+                            Un "quick-start" para usar Django REST Framework y servir tus modelos predictivos o dashboards de Python a través de una API robusta y segura.
+                        </p>
+
+                        <div class="card-footer-event">
+                            <p class="event-meta-date">
+                                <i class="fas fa-calendar-alt"></i>  A definir
+                            </p>
+                            <span class="status-message">En Desarrollo</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <p class="small-note-events text-center" style="margin-top: 40px;">*Plazas limitadas. Se enviará el link de acceso por email.</p>
         </div>
     </section>
 
     <section class="services-section" id="servicios">
         <div class="container text-center" data-aos="fade-right">
-            <h2>Nuestros Servicios de Consultoría</h2>
+            <h2 class="title-accent-line">Nuestros Servicios de Consultoría</h2>
             <div class="services-grid">
                 <div class="service-item" data-aos="zoom-in-right">
                     <h3>Consultoría en Data</h3>
                     <p>Análisis avanzado y desarrollo de pipelines de datos.</p>
                 </div>
-                 <div class="service-item" data-aos="zoom-in-left">
+                    <div class="service-item" data-aos="zoom-in-left">
                     <h3>Desarrollo Web (Django)</h3>
                     <p>Construcción de aplicaciones web robustas y escalables.</p>
                 </div>
@@ -131,12 +211,19 @@
         </div>
     </section>
 
-    <section class="contact-section" id="contacto" style="padding: 50px 0; background-color: #e9ecef;" data-aos="fade-up">
-        <div class="container text-center">
-            <h2>Contáctanos</h2>
-            <p>Envíanos un mensaje para discutir tu próximo proyecto.</p>
-        </div>
-    </section>
+   <section id="contacto" class="contact-section text-center">
+    <div class="container">
+        <h2 class="title-accent-line">Hablemos de tu Proyecto</h2>
+        <p class="subtitle">Agenda una reunión gratuita de 15 minutos para discutir tus necesidades y objetivos.</p>
+        
+       <a 
+    href="{% url 'contacto' %}" 
+    class="btn btn-cta"
+>
+    Agenda una Consulta Gratuita
+</a>
+    </div>
+</section>
 
 
     <footer data-aos="fade-in">
@@ -148,10 +235,10 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     
     <script>
-      AOS.init({
-        duration: 800,
-        once: true,
-      });
+        AOS.init({
+            duration: 800,
+            once: true,
+        });
     </script>
 </body>
 </html>

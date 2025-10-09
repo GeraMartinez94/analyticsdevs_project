@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contacto y Consultoría - AnalyticsDevs</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  </head>
+  <body>
+    <nav class="navbar navbar-internal">
+      <div class="container">
+        <a href="{% url 'home' %}" class="logo">AnalyticsDevs</a>
+        <div class="nav-links">
+          <a href="{% url 'home' %}#portafolio">Portafolio</a>
+          <a href="{% url 'home' %}#eventos">Eventos</a>
+          <a href="{% url 'home' %}#servicios">Servicios</a>
+          <a href="{% url 'contacto' %}">Contacto</a> 
+        </div>
+      </div>
+    </nav>
+
+    <section id="agendamiento" class="contact-section text-center">
+      <div class="container py-5">
+        
+        <h2 class="title-accent-line mb-4" data-aos="fade-down">Agenda una Consulta Gratuita</h2>
+        
+        <p class="lead mb-5" data-aos="fade-up" data-aos-delay="100">
+            ¿Tienes un proyecto en mente o necesitas consultoría? Agenda un espacio de 15 minutos sin costo.
+            Estamos aquí para transformar tus datos en soluciones inteligentes.
+        </p>
+
+        <div class="contact-action-box" data-aos="zoom-in" data-aos-delay="200">
+            
+            <a 
+                href="[TU ENLACE DE CALENDLY PARA CONSULTORÍA AQUÍ]" 
+                target="_blank" 
+                class="btn btn-primary btn-cta-big mb-4"
+                title="Agenda tu reunión en Calendly"
+            >
+                Agendar Consulta de 15 Minutos
+            </a>
+            
+            <p class="contact-or-separator mb-4" data-aos="fade-up" data-aos-delay="300">
+                O si prefieres, contáctanos directamente:
+            </p>
+
+            <div class="contact-links" data-aos="fade-up" data-aos-delay="400">
+                <a 
+                    href="mailto:geramartinez450@gmail.com" 
+                    class="contact-link"
+                    title="Envíanos un correo electrónico"
+                >
+                    <i class="fas fa-envelope icon-mail"></i> geramartinez450@gmail.com
+                </a>
+
+                <a 
+                    href="https://www.linkedin.com/in/gerardo-martinez-data-analytics/" 
+                    target="_blank" 
+                    class="contact-link"
+                    title="Conecta con nosotros en LinkedIn"
+                >
+                    <i class="fab fa-linkedin icon-linkedin"></i> Analytics Devs Consulting
+                </a>
+            </div>
+        </div>
+        
+        <a href="{% url 'home' %}" class="btn btn-secondary mt-5" data-aos="fade-up" data-aos-delay="500">
+            <i class="fas fa-arrow-left me-2"></i> Volver al Inicio
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2025 AnalyticsDevs. Todos los derechos reservados.</p>
+      </div>
+    </footer>
+    
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        duration: 800,
+        once: true,
+      });
+    </script>
+  </body>
+</html>

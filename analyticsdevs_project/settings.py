@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'core',
     'portafolio',
     'eventos',
+
 ]
 
 MIDDLEWARE = [
@@ -125,3 +126,39 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # Default primary key field type
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# settings.py
+
+# ----------------------------------------------------
+# CONFIGURACIÓN DE CORREO ELECTRÓNICO (EMAIL)
+# LECTURA DE VARIABLES DESDE .env O ENTORNO DE PRODUCCIÓN
+# ----------------------------------------------------
+
+# La contraseña de aplicación de Google o la contraseña del host SMTP.
+# Si el envío falla, revisa que EMAIL_HOST_PASSWORD esté definido en tu .env o en el entorno de PythonAnywhere.
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD') 
+
+# El correo que usará Django para autenticarse (debe ser la cuenta del servicio SMTP).
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER') 
+
+# Solo activa el envío real si las credenciales están presentes
+if EMAIL_HOST_USER and EMAIL_HOST_PASSWORD:
+    
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    
+    # Configuración del servidor (usaremos Gmail como ejemplo por defecto)
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    
+    # Remitentes por defecto (usando la cuenta de envío)
+    DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+    SERVER_EMAIL = EMAIL_HOST_USER
+    
+    # DEBUG: Si la clave no está presente, Django no intentará enviar correos.
+else:
+    # Si las variables no están cargadas, usamos el backend de consola para que no falle.
+    # Los correos se imprimirán en la consola de Django.
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    
