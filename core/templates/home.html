@@ -9,12 +9,187 @@
     <title>Portafolio Profesional - AnalyticsDevs</title>
     
     <link rel="stylesheet" href="{% static 'css/style.css' %}"> 
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        /* ==================================== */
+        /* === ESTILOS DEL CHATBOT (CRÍTICOS Y UNIFICADOS) === */
+        /* ==================================== */
+
+        /* Estilos del botón flotante (Toggle Button) */
+        .chatbot-toggle-button {
+            position: fixed;
+            bottom: 30px; 
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.8em;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transition: transform 0.3s, background-color 0.3s, opacity 1s;
+            opacity: 0; 
+            transform: translateY(20px); 
+        }
+
+        .chatbot-toggle-button.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .chatbot-toggle-button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        /* Estilos del contenedor del Chatbot (El panel en sí) */
+        .chat-widget-container {
+            position: fixed;
+            bottom: 90px; 
+            right: 30px;
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1001; 
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            
+            opacity: 0;
+            transform: scale(0.8);
+            pointer-events: none; 
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        }
+
+        .chat-widget-container.open {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+        
+        /* Estilos del encabezado */
+        .chat-header {
+            background: #343a40; 
+            color: white;
+            padding: 15px;
+            font-size: 1.1em;
+            text-align: center;
+        }
+        
+        /* Estilos del cuerpo del chat */
+        .chat-body {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex; 
+            flex-direction: column;
+        }
+        .chat-message {
+            margin: 8px 0;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 85%;
+            font-size: 0.9em;
+        }
+        .user-message {
+            background-color: #007bff;
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        .bot-message {
+            background-color: #e9ecef;
+            color: #333;
+            align-self: flex-start;
+            margin-right: auto;
+        }
+        /* Estilo especial para el mensaje de advertencia de inactividad */
+        .warning-message {
+            background-color: #ffc107; /* Amarillo */
+            color: #333;
+            text-align: center;
+            font-size: 0.8em;
+            padding: 5px 10px;
+            margin: 10px auto;
+            border-radius: 5px;
+            max-width: 95%;
+        }
+
+        /* ------------------------------------------------ */
+        /* === ESTILOS DEL SPINNER DE CARGA (NUEVO) === */
+        /* ------------------------------------------------ */
+        /* Definición de la animación de giro */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Estilo para el ícono de spinner */
+        .loading-spinner {
+            color: #007bff; /* Color azul para que resalte */
+            animation: spin 1s linear infinite; /* Aplica la animación */
+            margin-right: 5px;
+        }
+        /* ------------------------------------------------ */
+
+        /* Estilos del footer y el nuevo botón de reinicio */
+        .chat-footer {
+            display: flex;
+            border-top: 1px solid #ddd;
+        }
+        /* Botón de Limpiar/Reiniciar DENTRO del footer */
+        .clear-chat-button {
+            background: #dc3545; /* Rojo para reset */
+            color: white;
+            border: none;
+            padding: 0 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 1em; /* Ajuste visual */
+        }
+        .clear-chat-button:hover {
+            background: #c82333;
+        }
+
+        .chat-footer input {
+            flex: 1;
+            border: none;
+            padding: 12px;
+            font-size: 0.9em;
+            outline: none;
+        }
+        .chat-footer button:last-child { /* Botón Enviar */
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 0 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .chat-footer button:last-child:hover {
+            background: #0056b3;
+        }
+        /* Media query para pantallas pequeñas */
+        @media (max-width: 600px) {
+            .chat-widget-container {
+                width: 90%;
+                right: 5%;
+                height: 80vh;
+                bottom: 90px; 
+            }
+        }
+    </style>
 </head>
 <body>
+    
+    {% csrf_token %} 
 
     <div class="message-container">
         {% for message in messages %}
@@ -82,42 +257,42 @@
     </section>
     
     <section class="case-studies-section" id="portafolio">
-    <div class="container">
-        <h2 class="text-center title-accent-line" data-aos="fade-up">Proyectos Destacados</h2> 
-        
-        <div class="case-study-grid">
+        <div class="container">
+            <h2 class="text-center title-accent-line" data-aos="fade-up">Proyectos Destacados</h2> 
             
-            {% for repo in featured_repos %}
-            <a href="{{repo.html_url }}" target="_blank" class="project-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 | stringformat:'i' }}00">
-                <div class="card-header">
-                    <h3>{{ repo.name }}</h3>
-                    
-                </div>
-                <span class="language-tag" style="background-color: {{ repo.language | get_language_color_filter }};">
-                            {{ repo.language }}
-                        </span>
-                <p class="project-description">
-                    {% if repo.description %}
-                        {{ repo.description }}
-                    {% else %}
-                        No hay descripción disponible.
-                    {% endif %}
-                </p>
+            <div class="case-study-grid">
+                
+                {% for repo in featured_repos %}
+                <a href="{{repo.html_url }}" target="_blank" class="project-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 | stringformat:'i' }}00">
+                    <div class="card-header">
+                        <h3>{{ repo.name }}</h3>
+                        
+                    </div>
+                    <span class="language-tag" style="background-color: {{ repo.language | get_language_color_filter }};">
+                                {{ repo.language }}
+                            </span>
+                    <p class="project-description">
+                        {% if repo.description %}
+                            {{ repo.description }}
+                        {% else %}
+                            No hay descripción disponible.
+                        {% endif %}
+                    </p>
 
-                <div class="card-footer">
-                    
-                    <small>Última actualización: {% if repo.updated_at %}{{ repo.updated_at|date:"d M Y" }}{% else %}N/A{% endif %}</small>
+                    <div class="card-footer">
+                        
+                        <small>Última actualización: {% if repo.updated_at %}{{ repo.updated_at|date:"d M Y" }}{% else %}N/A{% endif %}</small>
+                    </div>
+                </a>
+                {% empty %}
+                <div style="grid-column: 1 / -1; text-align: center;">
+                    <p>No se pudieron cargar los proyectos destacados de GitHub. Por favor, revisa tu Token de Acceso Personal o la lista de repositorios fijados en 'views.py'.</p>
                 </div>
-            </a>
-            {% empty %}
-            <div style="grid-column: 1 / -1; text-align: center;">
-                <p>No se pudieron cargar los proyectos destacados de GitHub. Por favor, revisa tu Token de Acceso Personal o la lista de repositorios fijados en 'views.py'.</p>
+                {% endfor %}
+
             </div>
-            {% endfor %}
-
         </div>
-    </div>
-</section>
+    </section>
 
     <section class="events-section" id="eventos">
         <div class="container">
@@ -184,7 +359,7 @@
 
                         <div class="card-footer-event">
                             <p class="event-meta-date">
-                                <i class="fas fa-calendar-alt"></i>  A definir
+                                <i class="fas fa-calendar-alt"></i>  A definir
                             </p>
                             <span class="status-message">En Desarrollo</span>
                         </div>
@@ -211,33 +386,260 @@
         </div>
     </section>
 
-   <section id="contacto" class="contact-section text-center">
-    <div class="container">
-        <h2 class="title-accent-line">Hablemos de tu Proyecto</h2>
-        <p class="subtitle">Agenda una reunión gratuita de 15 minutos para discutir tus necesidades y objetivos.</p>
-        
-       <a 
-    href="{% url 'contacto' %}" 
-    class="btn btn-cta"
->
-    Agenda una Consulta Gratuita
-</a>
-    </div>
-</section>
+    <section id="contacto" class="contact-section text-center">
+        <div class="container">
+            <h2 class="title-accent-line">Hablemos de tu Proyecto</h2>
+            <p class="subtitle">Agenda una reunión gratuita de 15 minutos para discutir tus necesidades y objetivos.</p>
+            
+            <a 
+                href="{% url 'contacto' %}" 
+                class="btn btn-cta"
+            >
+                Agenda una Consulta Gratuita
+            </a>
+        </div>
+    </section>
 
 
-    <footer data-aos="fade-in">
+    <footer>
         <div class="container">
             <p>&copy; 2025 AnalyticsDevs. Todos los derechos reservados.</p>
         </div>
     </footer>
-    
+
+    <button class="chatbot-toggle-button" id="chatbot-toggle" aria-label="Abrir Chatbot">
+        <i class="fas fa-comment-dots"></i>
+    </button>
+
+    <div class="chat-widget-container" id="chat-widget">
+        <div class="chat-header">
+            🤖 Chatbot IA - AnalyticsDevs
+        </div>
+        <div class="chat-body" id="chat-body">
+            <div class="chat-message bot-message" id="initial-message">
+                ¡Hola! Soy tu asistente de AnalyticsDevs. Estoy aquí para responder preguntas sobre mi portafolio, habilidades y proyectos.
+            </div>
+        </div>
+        <div class="chat-footer">
+            <button id="clear-chat-button" class="clear-chat-button" title="Reiniciar chat">
+                <i class="fas fa-redo"></i>
+            </button>
+            <input type="text" id="user-input" placeholder="Escribe un mensaje..." onkeydown="if(event.key === 'Enter') sendMessage()">
+            <button onclick="sendMessage()">Enviar</button>
+        </div>
+    </div>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    
     <script>
+        // Inicialización de AOS
         AOS.init({
             duration: 800,
             once: true,
+        });
+
+        // Referencias a los elementos del Chatbot
+        const chatWidget = document.getElementById('chat-widget');
+        const toggleButton = document.getElementById('chatbot-toggle');
+        const chatBody = document.getElementById("chat-body");
+        const initialMessage = document.getElementById("initial-message"); // Referencia al mensaje inicial
+        const clearChatButton = document.getElementById("clear-chat-button");
+        const userInput = document.getElementById('user-input');
+
+        // TEMPORIZADORES DE INACTIVIDAD (CRÍTICO)
+        let inactivityTimer;
+        let warningTimer;
+        const INACTIVITY_TIMEOUT = 60000; // 60 segundos (1 minuto)
+        const WARNING_TIME = 15000; // 15 segundos antes del timeout
+        let warningMessageElement = null;
+
+        // ------------------------------------------------------------------
+        // --- FUNCIÓN: REINICIO DE CHAT ---
+        // ------------------------------------------------------------------
+        function clearChat() {
+            // Eliminar todos los mensajes del cuerpo del chat
+            while (chatBody.firstChild) {
+                chatBody.removeChild(chatBody.firstChild);
+            }
+            // Restaurar el mensaje inicial
+            chatBody.appendChild(initialMessage.cloneNode(true));
+            chatBody.scrollTop = chatBody.scrollHeight;
+            
+            // Reiniciar el temporizador
+            resetInactivityTimer();
+            // Mostrar mensaje de reinicio (opcional, solo para indicar qué pasó)
+           
+        }
+
+        // ------------------------------------------------------------------
+        // --- FUNCIÓN: TEMPORIZADORES DE INACTIVIDAD ---
+        // ------------------------------------------------------------------
+        function showInactivityWarning() {
+            if (chatWidget.classList.contains('open') && !warningMessageElement) {
+                warningMessageElement = document.createElement("div");
+                warningMessageElement.classList.add("warning-message");
+                warningMessageElement.textContent = "⚠️ Inactividad: El chat se reiniciará en 15 segundos.";
+                
+                chatBody.appendChild(warningMessageElement);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
+            
+            // Establecer el reinicio forzado si no se interactúa
+            inactivityTimer = setTimeout(() => {
+                clearChat();
+            }, WARNING_TIME); 
+        }
+
+        function resetInactivityTimer() {
+            // 1. Limpiar los temporizadores existentes
+            clearTimeout(inactivityTimer);
+            clearTimeout(warningTimer);
+
+            // 2. Eliminar el mensaje de advertencia si existe
+            if (warningMessageElement && chatBody.contains(warningMessageElement)) {
+                chatBody.removeChild(warningMessageElement);
+            }
+            warningMessageElement = null;
+
+            // 3. Establecer el nuevo temporizador de advertencia (TIMEOUT - WARNING_TIME)
+            // Se muestra la advertencia antes de que ocurra el timeout final
+            if (chatWidget.classList.contains('open')) {
+                warningTimer = setTimeout(showInactivityWarning, INACTIVITY_TIMEOUT - WARNING_TIME);
+            }
+        }
+        
+        // ------------------------------------------------------------------
+        // --- FUNCIÓN: ENVIAR MENSAJE (MODIFICADA PARA EL SPINNER) ---
+        // ------------------------------------------------------------------
+        async function sendMessage() {
+            const message = userInput.value.trim();
+
+            if (!message) return;
+            
+            // CRÍTICO: Reiniciar el temporizador con cada mensaje enviado
+            resetInactivityTimer(); 
+
+            // 1. Mostrar mensaje del usuario
+            const userMsg = document.createElement("div");
+            userMsg.classList.add("chat-message", "user-message");
+            userMsg.textContent = message;
+            chatBody.appendChild(userMsg);
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            userInput.value = "";
+            userInput.disabled = true;
+
+            // 2. Mostrar indicador de carga (SPINNER)
+            const botLoadingMsg = document.createElement("div");
+            botLoadingMsg.classList.add("chat-message", "bot-message");
+            // Usamos innerHTML para incluir el ícono de Font Awesome
+            botLoadingMsg.innerHTML = `<i class="fas fa-circle-notch loading-spinner"></i>`; 
+            chatBody.appendChild(botLoadingMsg);
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            let reply = "";
+
+            try {
+                // Obtener el token CSRF. El token se pasa en el contexto de home_view, pero si el usuario
+                // no lo pasa o está en el contexto, hay que obtenerlo de la cookie o un campo oculto.
+                // Usaremos la técnica más segura de obtenerlo del input oculto (si lo pusiste) o de la cookie.
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value; 
+
+                const response = await fetch("/api/chat/", {
+                    method: "POST",
+                    headers: { 
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "X-CSRFToken": csrfToken 
+                    },
+                    body: "message=" + encodeURIComponent(message)
+                });
+                
+                const data = await response.json();
+
+                if (response.ok) {
+                    reply = data.reply; 
+                } else {
+                    reply = data.error || "Error desconocido al procesar la respuesta.";
+                }
+
+            } catch (error) {
+                console.error("Error al enviar mensaje:", error);
+                reply = "Lo siento, hubo un problema de conexión con la IA.";
+            } finally {
+                userInput.disabled = false;
+                userInput.focus();
+            }
+            
+            // 3. Reemplazar mensaje de carga con la respuesta final del bot
+            chatBody.removeChild(botLoadingMsg); 
+            
+            const botMsg = document.createElement("div");
+            botMsg.classList.add("chat-message", "bot-message");
+            botMsg.innerHTML = reply; // Usamos innerHTML por si la respuesta de la IA tiene formato Markdown/HTML
+            
+            chatBody.appendChild(botMsg);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+
+        // ------------------------------------------------------------------
+        // --- LÓGICA DE APERTURA Y CIERRE Y CONEXIÓN DE BOTONES ---
+        // ------------------------------------------------------------------
+
+        // Efecto de entrada sutil para el botón
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                toggleButton.classList.add('visible');
+            }, 1000); 
+        });
+
+        // Toggle del chatbot
+        toggleButton.addEventListener('click', (event) => {
+            event.stopPropagation(); 
+            chatWidget.classList.toggle('open');
+            const icon = toggleButton.querySelector('i');
+            
+            if (chatWidget.classList.contains('open')) {
+                icon.classList.remove('fa-comment-dots');
+                icon.classList.add('fa-times');
+                userInput.focus();
+                resetInactivityTimer(); // Reiniciar el temporizador al abrir
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-comment-dots');
+                clearTimeout(inactivityTimer); // Detener temporizadores al cerrar
+                clearTimeout(warningTimer);
+                if (warningMessageElement && chatBody.contains(warningMessageElement)) {
+                    chatBody.removeChild(warningMessageElement);
+                    warningMessageElement = null;
+                }
+            }
+        });
+
+        // Evento para cerrar el chat al hacer clic fuera
+        document.addEventListener('click', (event) => {
+            const isClickInsideWidget = chatWidget.contains(event.target);
+            const isClickOnToggleButton = toggleButton.contains(event.target);
+
+            if (chatWidget.classList.contains('open') && !isClickInsideWidget && !isClickOnToggleButton) {
+                chatWidget.classList.remove('open');
+                
+                // Restablecer el icono y detener temporizadores
+                const icon = toggleButton.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-comment-dots');
+                clearTimeout(inactivityTimer); 
+                clearTimeout(warningTimer);
+                if (warningMessageElement && chatBody.contains(warningMessageElement)) {
+                    chatBody.removeChild(warningMessageElement);
+                    warningMessageElement = null;
+                }
+            }
+        });
+
+        // Conectar el botón de limpiar chat
+        clearChatButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            clearChat();
+            resetInactivityTimer();
         });
     </script>
 </body>

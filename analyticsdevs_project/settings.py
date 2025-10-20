@@ -17,7 +17,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-tu-clave-por-defecto'
 # SECURITY WARNING: don't run with debug turned on in production!
 # Lee el estado de DEBUG de las variables de entorno
 DEBUG = os.environ.get('DEBUG', 'True') == 'True' 
-
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 # Permite hosts de desarrollo y el dominio de PythonAnywhere (GeraMar94.pythonanywhere.com)
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'GeraMar94.pythonanywhere.com'] 
 
