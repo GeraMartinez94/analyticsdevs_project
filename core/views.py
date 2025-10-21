@@ -1,14 +1,28 @@
 from django.http import JsonResponse
-import requests
 import os 
 from django.shortcuts import render
 from google import genai
 from google.genai import types
 from django.conf import settings
 from django.views.decorators.http import require_http_methods
-import markdown # <--- 1. IMPORTAR LA LIBRERÍA MARKDOWN
+import markdown
 
 GITHUB_USERNAME = "GeraMartinez94"
+
+# --- CONTENIDO DEL CV PARA EL CHATBOT ---
+# Este contenido se inyecta en el System Instruction de Gemini.
+CV_CONTENT = (
+    "PERFIL: Desarrollador backend con sólida experiencia en Python, Big Data e Inteligencia Artificial. "
+    "Enfocado en la creación de sistemas robustos y escalables, con experiencia en Django, Flask, FastAPI, AWS, Docker y Snowflake.\n"
+    "HABILIDADES: Python, SQL, Django, Flask, FastAPI, AWS, GCP, Docker, Kubernetes, CI/CD, Linux, Snowflake, Apache Airflow, Spark, Pandas.\n"
+    "EXPERIENCIA:\n"
+    " - Big Data Engineer en COREBI (2024-2025): Diseño de pipelines en entornos cloud, Airflow y Spark para procesamiento masivo, optimización de flujos de datos.\n"
+    " - Developer Mobile & Data Engineer en AGNOSTIC IT (2022-2024): Backend para apps móviles en Python, integración de ML y dashboards en tiempo real.\n"
+    " - Network Administrator & Developer Mobile en CABLE NORTE S.A. (2019-2021): Automatización de procesos con Python, administración de redes y servidores.\n"
+    "EDUCACIÓN: Analista de Sistemas / Licenciatura en Sistemas (UNAM, 2015 - Actualidad). Bachiller en Administración de Empresas (INSTITUTO MARIANO MORENO).\n"
+    "IDIOMAS: Inglés avanzado."
+)
+# ----------------------------------------
 
 FEATURED_REPOS = [
     {
@@ -75,7 +89,7 @@ def get_github_data():
 
     return {
         'languages': language_percentages, 
-        'featured_repos': FEATURED_REPOS,  
+        'featured_repos': FEATURED_REPOS, 
     }
 
 
@@ -92,17 +106,21 @@ def chat_api(request):
     if not user_message:
         return JsonResponse({'error': 'No se proporcionó un mensaje.'}, status=400)
 
+    # CRÍTICO: Comprobación de la clave API que causa tu error de PythonAnywhere.
     if not settings.GEMINI_API_KEY:
-        print("Error: GEMINI_API_KEY no está configurada en settings.py.")
-        return JsonResponse({'error': 'Error de configuración: La clave de Gemini no se encontró.'}, status=500)
+        print("Error: GEMINI_API_KEY no está configurada en settings.py o como variable de entorno.")
+        return JsonResponse({'error': 'Error de configuración: Clave de API no configurada en el servidor. (Revisa settings.py)'}, status=500)
 
     try:
         client = genai.Client(api_key=settings.GEMINI_API_KEY)
         
+        # *** PERSONALIDAD Y CONTEXTO DEL CV INCLUIDOS ***
         system_instruction = (
-            "Eres un asistente IA amigable y experto en Analítica de Datos, Python, Django y desarrollo web. "
-            "Tu objetivo es responder preguntas sobre mi portafolio y habilidades de forma profesional y concisa. "
-            "**SIEMPRE utiliza formato Markdown (como **negritas**, *cursivas*, y listas con *) para resaltar conceptos clave y mejorar la lectura.**"
+            f"INFORMACIÓN CLAVE SOBRE MÍ (Basada en el CV):\n---\n{CV_CONTENT}\n---\n\n"
+            "Eres el asistente de Gerardo Martínez. Responde SIEMPRE basándote en la información que te he proporcionado en el CV. "
+            "Si te preguntan sobre mi experiencia, habilidades (ej: *Python*, *Django*, *Snowflake*, *Airflow*, *AWS*), o proyectos, usa el contexto del CV. "
+            "Tu objetivo es responder preguntas sobre mi portafolio y habilidades de forma profesional y concisa, hablando siempre en primera persona. "
+            "**SIEMPRE utiliza formato Markdown (como **negritas**, *cursivas*, y listas con *) para resaltar conceptos clave.**"
         )
         
         response = client.models.generate_content(
@@ -114,11 +132,8 @@ def chat_api(request):
             )
         )
 
-        # ### CRÍTICO 1 ###: Obtener el texto que viene en formato Markdown
         markdown_text = response.text 
-        
-        # ### CRÍTICO 2 ###: CONVERTIR el Markdown (**) a HTML (<strong>)
-        bot_reply = markdown.markdown(markdown_text) # <--- ¡ESTA ES LA SOLUCIÓN!
+        bot_reply = markdown.markdown(markdown_text) 
         
         return JsonResponse({'reply': bot_reply})
 

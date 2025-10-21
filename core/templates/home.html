@@ -15,6 +15,7 @@
     <style>
         /* ==================================== */
         /* === ESTILOS DEL CHATBOT (CRÍTICOS Y UNIFICADOS) === */
+        /* Se eliminaron los estilos de .warning-message */
         /* ==================================== */
 
         /* Estilos del botón flotante (Toggle Button) */
@@ -110,20 +111,9 @@
             align-self: flex-start;
             margin-right: auto;
         }
-        /* Estilo especial para el mensaje de advertencia de inactividad */
-        .warning-message {
-            background-color: #ffc107; /* Amarillo */
-            color: #333;
-            text-align: center;
-            font-size: 0.8em;
-            padding: 5px 10px;
-            margin: 10px auto;
-            border-radius: 5px;
-            max-width: 95%;
-        }
-
+        
         /* ------------------------------------------------ */
-        /* === ESTILOS DEL SPINNER DE CARGA (NUEVO) === */
+        /* === ESTILOS DEL SPINNER DE CARGA === */
         /* ------------------------------------------------ */
         /* Definición de la animación de giro */
         @keyframes spin {
@@ -444,12 +434,7 @@
         const clearChatButton = document.getElementById("clear-chat-button");
         const userInput = document.getElementById('user-input');
 
-        // TEMPORIZADORES DE INACTIVIDAD (CRÍTICO)
-        let inactivityTimer;
-        let warningTimer;
-        const INACTIVITY_TIMEOUT = 60000; // 60 segundos (1 minuto)
-        const WARNING_TIME = 15000; // 15 segundos antes del timeout
-        let warningMessageElement = null;
+        // *** Lógica de Inactividad ELIMINADA ***
 
         // ------------------------------------------------------------------
         // --- FUNCIÓN: REINICIO DE CHAT ---
@@ -460,63 +445,20 @@
                 chatBody.removeChild(chatBody.firstChild);
             }
             // Restaurar el mensaje inicial
-            chatBody.appendChild(initialMessage.cloneNode(true));
+            // Se usa cloneNode(true) para que no se elimine la referencia original al limpiar.
+            chatBody.appendChild(initialMessage.cloneNode(true)); 
             chatBody.scrollTop = chatBody.scrollHeight;
-            
-            // Reiniciar el temporizador
-            resetInactivityTimer();
-            // Mostrar mensaje de reinicio (opcional, solo para indicar qué pasó)
-           
-        }
-
-        // ------------------------------------------------------------------
-        // --- FUNCIÓN: TEMPORIZADORES DE INACTIVIDAD ---
-        // ------------------------------------------------------------------
-        function showInactivityWarning() {
-            if (chatWidget.classList.contains('open') && !warningMessageElement) {
-                warningMessageElement = document.createElement("div");
-                warningMessageElement.classList.add("warning-message");
-                warningMessageElement.textContent = "⚠️ Inactividad: El chat se reiniciará en 15 segundos.";
-                
-                chatBody.appendChild(warningMessageElement);
-                chatBody.scrollTop = chatBody.scrollHeight;
-            }
-            
-            // Establecer el reinicio forzado si no se interactúa
-            inactivityTimer = setTimeout(() => {
-                clearChat();
-            }, WARNING_TIME); 
-        }
-
-        function resetInactivityTimer() {
-            // 1. Limpiar los temporizadores existentes
-            clearTimeout(inactivityTimer);
-            clearTimeout(warningTimer);
-
-            // 2. Eliminar el mensaje de advertencia si existe
-            if (warningMessageElement && chatBody.contains(warningMessageElement)) {
-                chatBody.removeChild(warningMessageElement);
-            }
-            warningMessageElement = null;
-
-            // 3. Establecer el nuevo temporizador de advertencia (TIMEOUT - WARNING_TIME)
-            // Se muestra la advertencia antes de que ocurra el timeout final
-            if (chatWidget.classList.contains('open')) {
-                warningTimer = setTimeout(showInactivityWarning, INACTIVITY_TIMEOUT - WARNING_TIME);
-            }
+            userInput.disabled = false; // Asegurar que el input esté habilitado
         }
         
         // ------------------------------------------------------------------
-        // --- FUNCIÓN: ENVIAR MENSAJE (MODIFICADA PARA EL SPINNER) ---
+        // --- FUNCIÓN: ENVIAR MENSAJE (SIN LÓGICA DE TEMPORIZADOR) ---
         // ------------------------------------------------------------------
         async function sendMessage() {
             const message = userInput.value.trim();
 
             if (!message) return;
             
-            // CRÍTICO: Reiniciar el temporizador con cada mensaje enviado
-            resetInactivityTimer(); 
-
             // 1. Mostrar mensaje del usuario
             const userMsg = document.createElement("div");
             userMsg.classList.add("chat-message", "user-message");
@@ -538,9 +480,7 @@
             let reply = "";
 
             try {
-                // Obtener el token CSRF. El token se pasa en el contexto de home_view, pero si el usuario
-                // no lo pasa o está en el contexto, hay que obtenerlo de la cookie o un campo oculto.
-                // Usaremos la técnica más segura de obtenerlo del input oculto (si lo pusiste) o de la cookie.
+                // Obtener el token CSRF del campo oculto
                 const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value; 
 
                 const response = await fetch("/api/chat/", {
@@ -569,11 +509,13 @@
             }
             
             // 3. Reemplazar mensaje de carga con la respuesta final del bot
-            chatBody.removeChild(botLoadingMsg); 
+            if (chatBody.contains(botLoadingMsg)) {
+                chatBody.removeChild(botLoadingMsg); 
+            }
             
             const botMsg = document.createElement("div");
             botMsg.classList.add("chat-message", "bot-message");
-            botMsg.innerHTML = reply; // Usamos innerHTML por si la respuesta de la IA tiene formato Markdown/HTML
+            botMsg.innerHTML = reply; // Usamos innerHTML porque el backend convierte Markdown a HTML
             
             chatBody.appendChild(botMsg);
             chatBody.scrollTop = chatBody.scrollHeight;
@@ -601,16 +543,11 @@
                 icon.classList.remove('fa-comment-dots');
                 icon.classList.add('fa-times');
                 userInput.focus();
-                resetInactivityTimer(); // Reiniciar el temporizador al abrir
+                // No se llama a resetInactivityTimer() aquí
             } else {
                 icon.classList.remove('fa-times');
                 icon.classList.add('fa-comment-dots');
-                clearTimeout(inactivityTimer); // Detener temporizadores al cerrar
-                clearTimeout(warningTimer);
-                if (warningMessageElement && chatBody.contains(warningMessageElement)) {
-                    chatBody.removeChild(warningMessageElement);
-                    warningMessageElement = null;
-                }
+                // No se limpian temporizadores aquí
             }
         });
 
@@ -622,16 +559,11 @@
             if (chatWidget.classList.contains('open') && !isClickInsideWidget && !isClickOnToggleButton) {
                 chatWidget.classList.remove('open');
                 
-                // Restablecer el icono y detener temporizadores
+                // Restablecer el icono
                 const icon = toggleButton.querySelector('i');
                 icon.classList.remove('fa-times');
                 icon.classList.add('fa-comment-dots');
-                clearTimeout(inactivityTimer); 
-                clearTimeout(warningTimer);
-                if (warningMessageElement && chatBody.contains(warningMessageElement)) {
-                    chatBody.removeChild(warningMessageElement);
-                    warningMessageElement = null;
-                }
+                // No se limpian temporizadores aquí
             }
         });
 
@@ -639,7 +571,7 @@
         clearChatButton.addEventListener('click', (event) => {
             event.preventDefault();
             clearChat();
-            resetInactivityTimer();
+            // Ya no hay resetInactivityTimer() que llamar aquí
         });
     </script>
 </body>
