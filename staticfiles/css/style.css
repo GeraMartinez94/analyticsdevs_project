@@ -339,7 +339,85 @@ h2 {
     color: var(--dark-text);
     font-size: 2.2em;
 }
+/* --- Mejora de Estilos de Chatbot --- */
 
+/* Contenedor principal con fondo sutil */
+.chat-widget-container {
+    background: #f8f9fa; /* Gris muy claro */
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Cabecera limpia y oscura */
+.chat-header {
+    background: #343a40; /* Gris muy oscuro/negro */
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1.05em;
+    padding: 12px 15px;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Cuerpo del chat (scrollable) */
+.chat-body {
+    padding: 10px 15px;
+    background-color: #ffffff; /* Fondo blanco para mejor contraste */
+}
+
+/* Mensaje Base */
+.chat-message {
+    margin: 10px 0;
+    padding: 12px 16px;
+    border-radius: 18px; /* Bordes más suaves */
+    max-width: 80%;
+    font-size: 0.95em;
+    line-height: 1.4;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05); /* Sombra sutil */
+}
+
+/* Mensaje del Usuario (Más profesional, azul corporativo) */
+.user-message {
+    background-color: #007bff; /* Azul primario */
+    color: white;
+    align-self: flex-end;
+    margin-left: auto;
+    border-bottom-right-radius: 5px; /* Esquina más afilada en el origen */
+}
+
+/* Mensaje del Bot (Gris claro) */
+.bot-message {
+    background-color: #e9ecef; /* Gris suave */
+    color: #333;
+    align-self: flex-start;
+    margin-right: auto;
+    border-bottom-left-radius: 5px; /* Esquina más afilada en el origen */
+}
+
+/* Pie de página y entrada de texto */
+.chat-footer {
+    border-top: 1px solid #e9ecef;
+    background-color: #ffffff;
+    padding: 5px;
+}
+.chat-footer input {
+    font-size: 1em;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 20px;
+    margin-right: 5px;
+}
+
+.chat-footer button {
+    background: #28a745; /* Botón de envío verde (más "acción") */
+    border-radius: 20px;
+    padding: 10px 15px;
+    font-weight: 600;
+}
+
+.chat-footer button:hover {
+    background: #218838;
+}
 /* --- 8. SERVICES --- */
 .services-section {
     background-color: var(--card-bg);
