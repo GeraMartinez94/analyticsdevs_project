@@ -19,6 +19,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-tu-clave-por-defecto'
 DEBUG = os.environ.get('DEBUG', 'True') == 'True' 
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 # Permite hosts de desarrollo y el dominio de PythonAnywhere (GeraMar94.pythonanywhere.com)
+RAILWAY_DOMAIN = os.environ.get('RAILWAY_PUBLIC_DOMAIN') or os.environ.get('RAILWAY_STATIC_URL')
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'GeraMar94.pythonanywhere.com'] 
 
 # Application definition
@@ -69,7 +70,11 @@ WSGI_APPLICATION = 'analyticsdevs_project.wsgi.application'
 
 
 # Database
-
+if RAILWAY_DOMAIN:
+    # Agrega el dominio público asignado por Railway
+    ALLOWED_HOSTS.append(RAILWAY_DOMAIN)
+# Opción de comodín (menos segura, pero asegura que funcione en el dominio .up.railway.app)
+ALLOWED_HOSTS.append('.up.railway.app')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
