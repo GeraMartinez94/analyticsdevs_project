@@ -1,6 +1,5 @@
-{% load static %} 
-{% load github_extras %} 
-
+{% load static %}
+{% load github_extras %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,188 +7,383 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portafolio Profesional - AnalyticsDevs</title>
     
-    <link rel="stylesheet" href="{% static 'css/style.css' %}"> 
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
     <style>
         /* ==================================== */
-        /* === ESTILOS DEL CHATBOT (CRÍTICOS Y UNIFICADOS) === */
+        /* === ESTILOS DEL CHATBOT (CRÍTICOS Y UNIFICADOS) - DARK/LIGHT MODE === */
         /* ==================================== */
 
-        /* Estilos del botón flotante (Toggle Button) */
+        /* 1. VARIABLES BASE (DARK MODE POR DEFECTO) */
+        :root {
+            --primary-color: #007bff; 
+            --secondary-color: #212529; 
+            --user-bubble-bg: #007bff; 
+            --bot-bubble-bg: #3c4146; 
+            --text-color: #FFFFFF; 
+            --border-color: #495057; 
+            --input-bg: #495057; 
+            --header-bg: #000000; 
+        }
+
+        /* 2. VARIABLES LIGHT MODE */
+        .chat-widget-container.light-mode {
+            --secondary-color: #f8f9fa; 
+            --bot-bubble-bg: #e9ecef; 
+            --text-color: #212529; 
+            --input-bg: #ffffff; 
+            --border-color: #dee2e6;
+            --header-bg: #ffffff;
+        }
+        .chat-widget-container.light-mode .user-message {
+            background-color: #007bff; 
+            color: white;
+        }
+
+        /* Botón flotante (Sin cambios) */
         .chatbot-toggle-button {
             position: fixed;
-            bottom: 30px; 
+            bottom: 30px;
             right: 30px;
             width: 60px;
             height: 60px;
-            background-color: #007bff;
+            background-color: var(--primary-color);
             color: white;
             border: none;
             border-radius: 50%;
             font-size: 1.8em;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); 
             z-index: 1000;
             transition: transform 0.3s, background-color 0.3s, opacity 1s;
-            opacity: 0; 
-            transform: translateY(20px); 
+            opacity: 0;
+            transform: translateY(20px);
         }
-
         .chatbot-toggle-button.visible {
             opacity: 1;
             transform: translateY(0);
         }
-
         .chatbot-toggle-button:hover {
             background-color: #0056b3;
             transform: scale(1.05);
         }
 
-        /* Estilos del contenedor del Chatbot (El panel en sí) */
+        /* Contenedor del Chatbot - Dark/Light Mode (Anclado a la derecha en escritorio) */
         .chat-widget-container {
             position: fixed;
-            bottom: 90px; 
+            bottom: 90px;
             right: 30px;
-            width: 350px;
-            height: 500px;
-            background: white;
+            left: auto; /* Asegura que se ancle a la derecha por defecto */
+            width: 380px; 
+            height: 550px; 
+            background: var(--secondary-color); 
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            z-index: 1001; 
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5); 
+            z-index: 1001;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            
             opacity: 0;
-            transform: scale(0.8);
-            pointer-events: none; 
-            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+            transform: scale(0.9); 
+            pointer-events: none;
+            transition: opacity 0.3s cubic-bezier(0.2, 0.6, 0.3, 1), transform 0.3s cubic-bezier(0.2, 0.6, 0.3, 1);
         }
-
         .chat-widget-container.open {
             opacity: 1;
-            transform: scale(1);
+            transform: scale(1); 
             pointer-events: auto;
         }
-        
-        /* Estilos del encabezado */
+
+        /* Encabezado del Chat - CON SWITCH TOGGLE */
         .chat-header {
-            background: #343a40; 
-            color: white;
-            padding: 15px;
-            font-size: 1.1em;
-            text-align: center;
+            background: var(--header-bg); 
+            color: var(--text-color); 
+            padding: 10px 15px; 
+            font-size: 1.15em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between; 
+            border-bottom: 1px solid var(--border-color);
+        }
+        .chat-header .robot-icon {
+            display: flex;
+            align-items: center;
+        }
+        .chat-header i {
+            margin-right: 8px;
+            color: var(--primary-color);
         }
         
-        /* Estilos del cuerpo del chat */
+        /* === ESTILOS DEL SWITCH TOGGLE === */
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+        }
+        .theme-switch {
+            display: inline-block;
+            height: 20px;
+            position: relative;
+            width: 40px;
+        }
+        .theme-switch input {
+            display: none;
+        }
+
+        .slider {
+            background-color: #adb5bd; 
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 20px;
+        }
+        .slider:before {
+            background-color: white;
+            bottom: 3px;
+            content: "";
+            height: 14px;
+            left: 3px;
+            position: absolute;
+            transition: .4s;
+            width: 14px;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+             background-color: var(--primary-color); 
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Cuerpo del Chat */
         .chat-body {
             flex: 1;
             padding: 15px;
             overflow-y: auto;
-            display: flex; 
+            display: flex;
             flex-direction: column;
+            background-color: var(--secondary-color); 
+            border-bottom: 1px solid var(--border-color);
         }
         .chat-message {
             margin: 8px 0;
-            padding: 10px;
-            border-radius: 10px;
-            max-width: 85%;
-            font-size: 0.9em;
+            padding: 12px 15px; 
+            border-radius: 18px; 
+            max-width: 85%; 
+            font-size: 0.95em;
+            line-height: 1.5; 
+            transition: all 0.2s ease-in-out; 
+            color: var(--text-color); 
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15); 
         }
         .user-message {
-            background-color: #007bff;
+            background-color: var(--user-bubble-bg);
             color: white;
             align-self: flex-end;
             margin-left: auto;
+            border-bottom-right-radius: 4px; 
         }
         .bot-message {
-            background-color: #e9ecef;
-            color: #333;
+            background-color: var(--bot-bubble-bg);
+            color: var(--text-color); 
             align-self: flex-start;
             margin-right: auto;
+            border-bottom-left-radius: 4px; 
         }
-        /* Estilo especial para el mensaje de advertencia de inactividad */
-        .warning-message {
-            background-color: #ffc107; /* Amarillo */
-            color: #333;
-            text-align: center;
-            font-size: 0.8em;
-            padding: 5px 10px;
-            margin: 10px auto;
-            border-radius: 5px;
-            max-width: 95%;
+        
+        /* Estilos para Listas */
+        .bot-message ul {
+            padding-left: 20px;
+            margin-top: 8px;
+            margin-bottom: 8px;
         }
-
-        /* ------------------------------------------------ */
-        /* === ESTILOS DEL SPINNER DE CARGA (NUEVO) === */
-        /* ------------------------------------------------ */
-        /* Definición de la animación de giro */
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .bot-message li {
+            margin-bottom: 4px;
+            list-style-type: disc;
         }
 
-        /* Estilo para el ícono de spinner */
-        .loading-spinner {
-            color: #007bff; /* Color azul para que resalte */
-            animation: spin 1s linear infinite; /* Aplica la animación */
-            margin-right: 5px;
+        /* Animación de Typing */
+        .typing-indicator {
+            display: inline-block;
+            margin: 0 2px;
+            width: 8px;
+            height: 8px;
+            background-color: #adb5bd; 
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: bounce 1.4s infinite ease-in-out;
         }
-        /* ------------------------------------------------ */
-
-        /* Estilos del footer y el nuevo botón de reinicio */
+        .typing-indicator:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
+        }
+        
+        /* Footer del Chat y botón de reinicio */
         .chat-footer {
             display: flex;
-            border-top: 1px solid #ddd;
+            border-top: 1px solid var(--border-color);
+            padding: 10px;
+            background-color: var(--secondary-color);
         }
-        /* Botón de Limpiar/Reiniciar DENTRO del footer */
         .clear-chat-button {
-            background: #dc3545; /* Rojo para reset */
+            background: #495057; 
             color: white;
             border: none;
-            padding: 0 15px;
+            padding: 0 12px;
+            margin-right: 8px;
             cursor: pointer;
             transition: background 0.2s;
-            font-size: 1em; /* Ajuste visual */
+            font-size: 1em;
+            border-radius: 6px; 
+            height: 40px;
+            display: flex;
+            align-items: center;
         }
         .clear-chat-button:hover {
-            background: #c82333;
+            background: #6c757d;
         }
-
         .chat-footer input {
             flex: 1;
-            border: none;
-            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 12px 15px;
             font-size: 0.9em;
             outline: none;
+            background-color: var(--input-bg); 
+            color: var(--text-color);
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
-        .chat-footer button:last-child { /* Botón Enviar */
-            background: #007bff;
+        .chat-footer input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.4);
+        }
+        .chat-footer button:last-child {
+            background: var(--primary-color);
             color: white;
             border: none;
-            padding: 0 15px;
+            padding: 0 20px;
+            margin-left: 8px;
             cursor: pointer;
             transition: background 0.2s;
+            height: 40px;
+            border-radius: 20px;
+            font-weight: 600;
         }
         .chat-footer button:last-child:hover {
             background: #0056b3;
         }
-        /* Media query para pantallas pequeñas */
+        .chat-footer button:last-child:disabled {
+            background: #3a5c82;
+            cursor: not-allowed;
+        }
+        .chat-footer input::placeholder {
+            color: #adb5bd;
+            opacity: 1;
+        }
+
+        /* ============================ */
+        /* === ESTILOS DEL GRÁFICO (SOLO PASTEL) === */
+        /* ============================ */
+        .analysis-flex-container {
+            display: flex;
+            justify-content: center; /* Centra el gráfico de pastel */
+            align-items: flex-start;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        /* Gráfico de Pastel */
+        .pie-chart-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #2c2f33; /* Fondo oscuro para el wrapper */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: auto; /* Ajusta el ancho automáticamente */
+            min-width: 300px; /* Ancho mínimo para mantener buena legibilidad */
+        }
+        .pie-chart {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            border: 5px solid #212529; /* Borde para contrastar con el fondo */
+        }
+        .legend {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            margin-top: 0;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            color: var(--text-color);
+        }
+        .legend-item span {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            margin-right: 10px;
+            display: inline-block;
+        }
+        .legend-note {
+            margin-top: 20px;
+            font-size: 0.85em;
+            color: #adb5bd;
+            text-align: center; /* Centra la nota al pie */
+            width: 100%; /* Asegura que la nota ocupe todo el ancho */
+        }
+
+        /* ============================ */
+        /* === MEDIA QUERY (MÓVIL) === */
+        /* ============================ */
+  /* ============================ */
+        /* === MEDIA QUERY PARA MÓVIL (AJUSTADO PARA CENTRADO) === */
+        /* ============================ */
         @media (max-width: 600px) {
+            .chatbot-toggle-button {
+                bottom: 20px; /* Un poco más arriba en móvil */
+                right: 20px;
+            }
+
             .chat-widget-container {
-                width: 90%;
-                right: 5%;
-                height: 80vh;
-                bottom: 90px; 
+                /* CENTRADO PERFECTO EN MÓVIL */
+                width: 95%; /* Ocupa casi todo el ancho */
+                height: 85vh; /* Ocupa casi todo el alto */
+                
+                /* Centrado horizontal */
+                left: 50%;
+                right: auto; /* Desactivar la posición right */
+                transform: translateX(-50%) scale(0.9); /* Centrar usando -50% del ancho y mantener la escala */
+                
+                /* Posición vertical */
+                bottom: 80px; /* Deja espacio para el botón toggle */
+            }
+            
+            .chat-widget-container.open {
+                /* Centrado horizontal al abrir */
+                transform: translateX(-50%) scale(1);
             }
         }
     </style>
 </head>
+
 <body>
-    
-    {% csrf_token %} 
+    {% csrf_token %}
 
     <div class="message-container">
         {% for message in messages %}
@@ -201,7 +395,7 @@
 
     <nav class="navbar">
         <div class="container">
-            <a href="#inicio" class="logo">AnalyticsDevs</a> 
+            <a href="#inicio" class="logo">AnalyticsDevs</a>
             <div class="nav-links">
                 <a href="#portafolio">Portafolio</a>
                 <a href="#eventos">Eventos</a>
@@ -211,11 +405,13 @@
         </div>
     </nav>
 
-    <section class="hero-section" id="inicio"> 
+    <section class="hero-section" id="inicio">
         <div class="container" data-aos="fade-up" data-aos-duration="1200">
             <div class="hero-content">
                 <h1 data-aos="fade-up" class="title-accent-line">Analítica y Desarrollo de Software</h1>
-                <p class="subtitle" data-aos="fade-up" data-aos-delay="300">Transformando datos en soluciones inteligentes con Python y Django.</p>
+                <p class="subtitle" data-aos="fade-up" data-aos-delay="300">
+                    Transformando datos en soluciones inteligentes con Python y Django.
+                </p>
                 <a href="#portafolio" class="btn btn-primary" data-aos="zoom-in" data-aos-delay="500">Ver Proyectos</a>
             </div>
         </div>
@@ -224,72 +420,54 @@
     <section class="github-analysis-section">
         <div class="container text-center">
             <h2 data-aos="fade-down" class="title-accent-line">Tecnologías Principales en GitHub</h2>
-            <p class="subtitle" data-aos="fade-down" data-aos-delay="200">Análisis dinámico del stack tecnológico de mis proyectos públicos.</p>
-
+            <p class="subtitle" data-aos="fade-down" data-aos-delay="200">
+                Análisis dinámico del stack tecnológico de mis proyectos públicos.
+            </p>
             <div class="analysis-flex-container">
-                
-                <div class="bar-chart-wrapper" data-aos="slide-right">
-                    <div class="language-bar-container">
-                        {% for lang in languages %}
-                            <div class="language-bar" style="width: {{ lang.percent }}%; background-color: {{ lang.color }};">
-                                {{ lang.language }} {{ lang.percent }}%
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-
                 <div class="pie-chart-wrapper" data-aos="zoom-in" data-aos-delay="500">
                     <div class="pie-chart" style="background: conic-gradient({{ gradient_string }});"></div>
-                    
                     <div class="legend" data-aos="fade-left">
                         {% for lang in languages %}
                             <div class="legend-item">
-                                <span style="background-color: {{ lang.color }};"></span> 
+                                <span style="background-color: {{ lang.color }};"></span>
                                 {{ lang.language }} {{ lang.percent }}%
                             </div>
                         {% endfor %}
                     </div>
                 </div>
             </div>
-            
             <p class="legend-note">Datos obtenidos directamente de la API de GitHub.</p>
         </div>
     </section>
-    
+
     <section class="case-studies-section" id="portafolio">
         <div class="container">
-            <h2 class="text-center title-accent-line" data-aos="fade-up">Proyectos Destacados</h2> 
-            
+            <h2 class="text-center title-accent-line" data-aos="fade-up">Proyectos Destacados</h2>
             <div class="case-study-grid">
-                
                 {% for repo in featured_repos %}
-                <a href="{{repo.html_url }}" target="_blank" class="project-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 | stringformat:'i' }}00">
-                    <div class="card-header">
-                        <h3>{{ repo.name }}</h3>
-                        
-                    </div>
-                    <span class="language-tag" style="background-color: {{ repo.language | get_language_color_filter }};">
-                                {{ repo.language }}
-                            </span>
-                    <p class="project-description">
-                        {% if repo.description %}
-                            {{ repo.description }}
-                        {% else %}
-                            No hay descripción disponible.
-                        {% endif %}
-                    </p>
-
-                    <div class="card-footer">
-                        
-                        <small>Última actualización: {% if repo.updated_at %}{{ repo.updated_at|date:"d M Y" }}{% else %}N/A{% endif %}</small>
-                    </div>
-                </a>
+                    <a href="{{ repo.html_url }}" target="_blank" class="project-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 | stringformat:'i' }}00">
+                        <div class="card-header">
+                            <h3>{{ repo.name }}</h3>
+                        </div>
+                        <span class="language-tag" style="background-color: {{ repo.language | get_language_color_filter }};">
+                            {{ repo.language }}
+                        </span>
+                        <p class="project-description">
+                            {% if repo.description %}
+                                {{ repo.description }}
+                            {% else %}
+                                No hay descripción disponible.
+                            {% endif %}
+                        </p>
+                        <div class="card-footer">
+                            <small>Última actualización: {% if repo.updated_at %}{{ repo.updated_at|date:"d M Y" }}{% else %}N/A{% endif %}</small>
+                        </div>
+                    </a>
                 {% empty %}
-                <div style="grid-column: 1 / -1; text-align: center;">
-                    <p>No se pudieron cargar los proyectos destacados de GitHub. Por favor, revisa tu Token de Acceso Personal o la lista de repositorios fijados en 'views.py'.</p>
-                </div>
+                    <div style="grid-column: 1 / -1; text-align: center;">
+                        <p>No se pudieron cargar los proyectos destacados de GitHub. Por favor, revisa tu Token de Acceso Personal o la lista de repositorios fijados en 'views.py'.</p>
+                    </div>
                 {% endfor %}
-
             </div>
         </div>
     </section>
@@ -297,76 +475,52 @@
     <section class="events-section" id="eventos">
         <div class="container">
             <h2 class="section-title text-center title-accent-line" data-aos="fade-down">Próximos Eventos y Webinars</h2>
-
             <div class="event-grid">
-
                 <div class="event-card-item" data-aos="fade-up">
-                    <div class="card-header-event header-python">
-                        PYTHON & IA
-                    </div>
-
+                    <div class="card-header-event header-python"> PYTHON & IA </div>
                     <div class="card-body-event">
                         <h3 class="card-title-event">Debate: El Futuro de Python en Analítica</h3>
-                        
                         <p class="card-description-event">
                             Analizaremos las tendencias de librerías como Pandas, Polars y la integración con Inteligencia Artificial. Ideal para desarrolladores y analistas de datos.
                         </p>
-
                         <div class="card-footer-event">
-                            <p class="event-meta-date">
-                                <i class="fas fa-calendar-alt"></i> A definir
-                            </p>
-
-                            <div class="calendar-add-links"> 
+                            <p class="event-meta-date"><i class="fas fa-calendar-alt"></i> A definir</p>
+                            <div class="calendar-add-links">
                                 <span class="status-message">En Desarrollo</span>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="event-card-item" data-aos="fade-up" data-aos-delay="200">
-                    <div class="card-header-event header-data-viz">
-                        DATA VIZ
-                    </div>
-
+                    <div class="card-header-event header-data-viz"> DATA VIZ </div>
                     <div class="card-body-event">
                         <h3 class="card-title-event">Webinar: Visualización Avanzada en Python</h3>
-                        
                         <p class="card-description-event">
                             Aprende a crear gráficos interactivos y estéticamente superiores usando Matplotlib, Seaborn y Plotly. Transforma datos crudos en historias visuales impactantes.
                         </p>
-
                         <div class="card-footer-event">
-                            <p class="event-meta-date">
-                                <i class="fas fa-calendar-alt"></i> A definir
-                            </p>
+                            <p class="event-meta-date"><i class="fas fa-calendar-alt"></i> A definir</p>
                             <span class="status-message">En Desarrollo</span>
                         </div>
                     </div>
                 </div>
-                
                 <div class="event-card-item" data-aos="fade-up" data-aos-delay="400">
-                    <div class="card-header-event header-django">
-                        DJANGO
-                    </div>
-
+                    <div class="card-header-event header-django"> DJANGO </div>
                     <div class="card-body-event">
                         <h3 class="card-title-event">Workshop: Fundamentos de Django para Analistas</h3>
-                        
                         <p class="card-description-event">
                             Un "quick-start" para usar Django REST Framework y servir tus modelos predictivos o dashboards de Python a través de una API robusta y segura.
                         </p>
-
                         <div class="card-footer-event">
-                            <p class="event-meta-date">
-                                <i class="fas fa-calendar-alt"></i>  A definir
-                            </p>
+                            <p class="event-meta-date"><i class="fas fa-calendar-alt"></i> A definir</p>
                             <span class="status-message">En Desarrollo</span>
                         </div>
                     </div>
                 </div>
-
-            </div> <p class="small-note-events text-center" style="margin-top: 40px;">*Plazas limitadas. Se enviará el link de acceso por email.</p>
+            </div>
+            <p class="small-note-events text-center" style="margin-top: 40px;">
+                *Plazas limitadas. Se enviará el link de acceso por email.
+            </p>
         </div>
     </section>
 
@@ -378,7 +532,7 @@
                     <h3>Consultoría en Data</h3>
                     <p>Análisis avanzado y desarrollo de pipelines de datos.</p>
                 </div>
-                    <div class="service-item" data-aos="zoom-in-left">
+                <div class="service-item" data-aos="zoom-in-left">
                     <h3>Desarrollo Web (Django)</h3>
                     <p>Construcción de aplicaciones web robustas y escalables.</p>
                 </div>
@@ -390,16 +544,9 @@
         <div class="container">
             <h2 class="title-accent-line">Hablemos de tu Proyecto</h2>
             <p class="subtitle">Agenda una reunión gratuita de 15 minutos para discutir tus necesidades y objetivos.</p>
-            
-            <a 
-                href="{% url 'contacto' %}" 
-                class="btn btn-cta"
-            >
-                Agenda una Consulta Gratuita
-            </a>
+            <a href="{% url 'contacto' %}" class="btn btn-cta">Agenda una Consulta Gratuita</a>
         </div>
     </section>
-
 
     <footer>
         <div class="container">
@@ -410,112 +557,104 @@
     <button class="chatbot-toggle-button" id="chatbot-toggle" aria-label="Abrir Chatbot">
         <i class="fas fa-comment-dots"></i>
     </button>
-
     <div class="chat-widget-container" id="chat-widget">
         <div class="chat-header">
-            🤖 Chatbot IA - AnalyticsDevs
+            <div class="robot-icon">
+                <i class="fas fa-robot"></i> Asistente IA - AnalyticsDevs
+            </div>
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch" for="checkbox">
+                    <input type="checkbox" id="checkbox" checked /> 
+                    <div class="slider"></div>
+                </label>
+            </div>
         </div>
         <div class="chat-body" id="chat-body">
             <div class="chat-message bot-message" id="initial-message">
-                ¡Hola! Soy tu asistente de AnalyticsDevs. Estoy aquí para responder preguntas sobre mi portafolio, habilidades y proyectos.
+                ¡Bienvenido/a! Soy su asistente de **AnalyticsDevs**. Estoy aquí para ofrecerle información detallada sobre el portafolio, servicios (Analítica, Desarrollo Web Django) y experiencia profesional. ¿En qué puedo asistirte hoy?
             </div>
         </div>
         <div class="chat-footer">
             <button id="clear-chat-button" class="clear-chat-button" title="Reiniciar chat">
                 <i class="fas fa-redo"></i>
             </button>
-            <input type="text" id="user-input" placeholder="Escribe un mensaje..." onkeydown="if(event.key === 'Enter') sendMessage()">
-            <button onclick="sendMessage()">Enviar</button>
+            <input type="text" id="user-input" placeholder="Escriba su consulta profesional..." onkeydown="if(event.key === 'Enter') sendMessage()">
+            <button id="send-button" onclick="sendMessage()">Enviar</button>
         </div>
     </div>
+
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         // Inicialización de AOS
-        AOS.init({
-            duration: 800,
-            once: true,
-        });
+        AOS.init({ duration: 800, once: true });
 
-        // Referencias a los elementos del Chatbot
+        // Elementos del Chatbot
         const chatWidget = document.getElementById('chat-widget');
         const toggleButton = document.getElementById('chatbot-toggle');
         const chatBody = document.getElementById("chat-body");
-        const initialMessage = document.getElementById("initial-message"); // Referencia al mensaje inicial
+        const initialMessage = document.getElementById("initial-message").cloneNode(true); 
         const clearChatButton = document.getElementById("clear-chat-button");
         const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+        const themeCheckbox = document.getElementById('checkbox'); 
 
-        // TEMPORIZADORES DE INACTIVIDAD (CRÍTICO)
-        let inactivityTimer;
-        let warningTimer;
-        const INACTIVITY_TIMEOUT = 60000; // 60 segundos (1 minuto)
-        const WARNING_TIME = 15000; // 15 segundos antes del timeout
-        let warningMessageElement = null;
-
-        // ------------------------------------------------------------------
-        // --- FUNCIÓN: REINICIO DE CHAT ---
-        // ------------------------------------------------------------------
-        function clearChat() {
-            // Eliminar todos los mensajes del cuerpo del chat
-            while (chatBody.firstChild) {
-                chatBody.removeChild(chatBody.firstChild);
-            }
-            // Restaurar el mensaje inicial
-            chatBody.appendChild(initialMessage.cloneNode(true));
-            chatBody.scrollTop = chatBody.scrollHeight;
-            
-            // Reiniciar el temporizador
-            resetInactivityTimer();
-            // Mostrar mensaje de reinicio (opcional, solo para indicar qué pasó)
-           
-        }
-
-        // ------------------------------------------------------------------
-        // --- FUNCIÓN: TEMPORIZADORES DE INACTIVIDAD ---
-        // ------------------------------------------------------------------
-        function showInactivityWarning() {
-            if (chatWidget.classList.contains('open') && !warningMessageElement) {
-                warningMessageElement = document.createElement("div");
-                warningMessageElement.classList.add("warning-message");
-                warningMessageElement.textContent = "⚠️ Inactividad: El chat se reiniciará en 15 segundos.";
-                
-                chatBody.appendChild(warningMessageElement);
-                chatBody.scrollTop = chatBody.scrollHeight;
-            }
-            
-            // Establecer el reinicio forzado si no se interactúa
-            inactivityTimer = setTimeout(() => {
-                clearChat();
-            }, WARNING_TIME); 
-        }
-
-        function resetInactivityTimer() {
-            // 1. Limpiar los temporizadores existentes
-            clearTimeout(inactivityTimer);
-            clearTimeout(warningTimer);
-
-            // 2. Eliminar el mensaje de advertencia si existe
-            if (warningMessageElement && chatBody.contains(warningMessageElement)) {
-                chatBody.removeChild(warningMessageElement);
-            }
-            warningMessageElement = null;
-
-            // 3. Establecer el nuevo temporizador de advertencia (TIMEOUT - WARNING_TIME)
-            // Se muestra la advertencia antes de que ocurra el timeout final
-            if (chatWidget.classList.contains('open')) {
-                warningTimer = setTimeout(showInactivityWarning, INACTIVITY_TIMEOUT - WARNING_TIME);
-            }
+        // Función de escritura (con manejo de \n para pausas/párrafos)
+        function typeMessage(element, text, delay = 25) {
+            return new Promise(resolve => {
+                let i = 0;
+                function typing() {
+                    if (i < text.length) {
+                        const char = text.charAt(i);
+                        
+                        if (char === '\n') {
+                            element.innerHTML += '<br>'; 
+                            chatBody.scrollTop = chatBody.scrollHeight;
+                            i++;
+                            setTimeout(typing, delay + 150); // Pausa más larga para párrafos
+                        } else {
+                            element.innerHTML += char; 
+                            chatBody.scrollTop = chatBody.scrollHeight;
+                            i++;
+                            setTimeout(typing, delay);
+                        }
+                    } else {
+                        resolve();
+                    }
+                }
+                typing();
+            });
         }
         
-        // ------------------------------------------------------------------
-        // --- FUNCIÓN: ENVIAR MENSAJE (MODIFICADA PARA EL SPINNER) ---
-        // ------------------------------------------------------------------
+        // Función de reinicio de chat
+        function clearChat() {
+            while (chatBody.firstChild) chatBody.removeChild(chatBody.firstChild); 
+            chatBody.appendChild(initialMessage.cloneNode(true));
+            chatBody.scrollTop = chatBody.scrollHeight;
+            userInput.disabled = false;
+            sendButton.disabled = false;
+            userInput.focus();
+        }
+
+        // Función para crear el indicador de "escribiendo"
+        function createTypingIndicator() {
+            const botLoadingMsg = document.createElement("div");
+            botLoadingMsg.classList.add("chat-message", "bot-message", "loading-indicator");
+            botLoadingMsg.innerHTML = `
+                <div class="loading-spinner-container">
+                    <span class="typing-indicator"></span>
+                    <span class="typing-indicator"></span>
+                    <span class="typing-indicator"></span>
+                </div>
+            `;
+            chatBody.appendChild(botLoadingMsg);
+            chatBody.scrollTop = chatBody.scrollHeight;
+            return botLoadingMsg;
+        }
+
+        // Función para enviar mensaje
         async function sendMessage() {
             const message = userInput.value.trim();
-
             if (!message) return;
-            
-            // CRÍTICO: Reiniciar el temporizador con cada mensaje enviado
-            resetInactivityTimer(); 
 
             // 1. Mostrar mensaje del usuario
             const userMsg = document.createElement("div");
@@ -523,124 +662,115 @@
             userMsg.textContent = message;
             chatBody.appendChild(userMsg);
             chatBody.scrollTop = chatBody.scrollHeight;
-
             userInput.value = "";
+            
+            // 2. Desactivar input y botón, y mostrar indicador de typing
             userInput.disabled = true;
+            sendButton.disabled = true;
+            const botLoadingMsg = createTypingIndicator();
 
-            // 2. Mostrar indicador de carga (SPINNER)
-            const botLoadingMsg = document.createElement("div");
-            botLoadingMsg.classList.add("chat-message", "bot-message");
-            // Usamos innerHTML para incluir el ícono de Font Awesome
-            botLoadingMsg.innerHTML = `<i class="fas fa-circle-notch loading-spinner"></i>`; 
-            chatBody.appendChild(botLoadingMsg);
-            chatBody.scrollTop = chatBody.scrollHeight;
 
             let reply = "";
-
             try {
-                // Obtener el token CSRF. El token se pasa en el contexto de home_view, pero si el usuario
-                // no lo pasa o está en el contexto, hay que obtenerlo de la cookie o un campo oculto.
-                // Usaremos la técnica más segura de obtenerlo del input oculto (si lo pusiste) o de la cookie.
-                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value; 
-
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
                 const response = await fetch("/api/chat/", {
                     method: "POST",
-                    headers: { 
+                    headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
-                        "X-CSRFToken": csrfToken 
+                        "X-CSRFToken": csrfToken
                     },
                     body: "message=" + encodeURIComponent(message)
                 });
-                
                 const data = await response.json();
+                
+                let rawReply = response.ok ? data.reply : data.error || "Error desconocido al procesar la respuesta.";
+                
+                // Limpieza de tags
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = rawReply;
+                let cleanedText = tempDiv.textContent.replace("Hola", "").replace("Soy el asistente de Gerardo Martínez", "Soy tu asistente").replace("basándome en la información de mi CV", "").trim();
 
-                if (response.ok) {
-                    reply = data.reply; 
+                if (cleanedText.length < 5) {
+                    reply = "¡Hola! Soy tu asistente de AnalyticsDevs. Estoy aquí para responder cualquier pregunta que tengas sobre mi experiencia, habilidades y proyectos. ¿En qué puedo ayudarte hoy?";
                 } else {
-                    reply = data.error || "Error desconocido al procesar la respuesta.";
+                    // Se mantiene la lógica de inyectar saltos de línea para la función typeMessage
+                    reply = cleanedText.replace(/\. /g, '.\n').replace(/! /g, '!\n').replace(/\? /g, '?\n'); 
                 }
 
             } catch (error) {
                 console.error("Error al enviar mensaje:", error);
-                reply = "Lo siento, hubo un problema de conexión con la IA.";
+                reply = "Lo siento, hubo un problema de conexión con el servicio de IA. Por favor, intente de nuevo.";
             } finally {
+                // 3. Remover indicador de typing
+                if (chatBody.contains(botLoadingMsg)) chatBody.removeChild(botLoadingMsg);
+                
+                // 4. Iniciar efecto de escritura del bot
+                const botMsg = document.createElement("div");
+                botMsg.classList.add("chat-message", "bot-message");
+                botMsg.innerHTML = ""; 
+                chatBody.appendChild(botMsg);
+                
+                await typeMessage(botMsg, reply);
+
+                // 5. Reactivar input y botón
                 userInput.disabled = false;
+                sendButton.disabled = false;
                 userInput.focus();
+                chatBody.scrollTop = chatBody.scrollHeight;
             }
-            
-            // 3. Reemplazar mensaje de carga con la respuesta final del bot
-            chatBody.removeChild(botLoadingMsg); 
-            
-            const botMsg = document.createElement("div");
-            botMsg.classList.add("chat-message", "bot-message");
-            botMsg.innerHTML = reply; // Usamos innerHTML por si la respuesta de la IA tiene formato Markdown/HTML
-            
-            chatBody.appendChild(botMsg);
-            chatBody.scrollTop = chatBody.scrollHeight;
         }
 
+        // **FUNCIONALIDAD: SWITCH DE TEMA**
+        function toggleTheme() {
+            chatWidget.classList.toggle('light-mode');
+            const isLight = chatWidget.classList.contains('light-mode');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        }
 
-        // ------------------------------------------------------------------
-        // --- LÓGICA DE APERTURA Y CIERRE Y CONEXIÓN DE BOTONES ---
-        // ------------------------------------------------------------------
-
-        // Efecto de entrada sutil para el botón
+        // Cargar preferencia al iniciar
         window.addEventListener('load', () => {
-            setTimeout(() => {
-                toggleButton.classList.add('visible');
-            }, 1000); 
+            const savedTheme = localStorage.getItem('theme');
+            
+            if (savedTheme === 'light') {
+                themeCheckbox.checked = false; 
+                chatWidget.classList.add('light-mode');
+            } else {
+                themeCheckbox.checked = true; 
+                chatWidget.classList.remove('light-mode');
+            }
+            
+            setTimeout(() => toggleButton.classList.add('visible'), 1000);
         });
+        
+        // Listener para el switch
+        themeCheckbox.addEventListener('change', toggleTheme);
+
 
         // Toggle del chatbot
         toggleButton.addEventListener('click', (event) => {
-            event.stopPropagation(); 
+            event.stopPropagation();
             chatWidget.classList.toggle('open');
             const icon = toggleButton.querySelector('i');
-            
             if (chatWidget.classList.contains('open')) {
-                icon.classList.remove('fa-comment-dots');
-                icon.classList.add('fa-times');
+                icon.classList.replace('fa-comment-dots', 'fa-times');
                 userInput.focus();
-                resetInactivityTimer(); // Reiniciar el temporizador al abrir
             } else {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-comment-dots');
-                clearTimeout(inactivityTimer); // Detener temporizadores al cerrar
-                clearTimeout(warningTimer);
-                if (warningMessageElement && chatBody.contains(warningMessageElement)) {
-                    chatBody.removeChild(warningMessageElement);
-                    warningMessageElement = null;
-                }
+                icon.classList.replace('fa-times', 'fa-comment-dots');
             }
         });
 
-        // Evento para cerrar el chat al hacer clic fuera
+        // Cerrar chat al hacer clic fuera
         document.addEventListener('click', (event) => {
-            const isClickInsideWidget = chatWidget.contains(event.target);
-            const isClickOnToggleButton = toggleButton.contains(event.target);
-
-            if (chatWidget.classList.contains('open') && !isClickInsideWidget && !isClickOnToggleButton) {
+            if (chatWidget.classList.contains('open') &&
+                !chatWidget.contains(event.target) &&
+                !toggleButton.contains(event.target)) {
                 chatWidget.classList.remove('open');
-                
-                // Restablecer el icono y detener temporizadores
-                const icon = toggleButton.querySelector('i');
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-comment-dots');
-                clearTimeout(inactivityTimer); 
-                clearTimeout(warningTimer);
-                if (warningMessageElement && chatBody.contains(warningMessageElement)) {
-                    chatBody.removeChild(warningMessageElement);
-                    warningMessageElement = null;
-                }
+                toggleButton.querySelector('i').classList.replace('fa-times', 'fa-comment-dots');
             }
         });
 
-        // Conectar el botón de limpiar chat
-        clearChatButton.addEventListener('click', (event) => {
-            event.preventDefault();
-            clearChat();
-            resetInactivityTimer();
-        });
+        // Botón de limpiar chat
+        clearChatButton.addEventListener('click', (event) => { event.preventDefault(); clearChat(); });
     </script>
 </body>
 </html>

@@ -1,13 +1,28 @@
 from django.http import JsonResponse
-import requests
-import os 
+import os
 from django.shortcuts import render
-from openai import OpenAI 
+from google import genai
+from google.genai import types
 from django.conf import settings
 from django.views.decorators.http import require_http_methods
+import markdown
 
 GITHUB_USERNAME = "GeraMartinez94"
 
+# --- CONTENIDO DEL CV PARA EL CHATBOT ---
+# Este contenido se inyecta en el System Instruction de Gemini.
+CV_CONTENT = (
+    "PERFIL: Desarrollador backend con sólida experiencia en Python, Big Data e Inteligencia Artificial. "
+    "Enfocado en la creación de sistemas robustos y escalables, con experiencia en Django, Flask, FastAPI, AWS, Docker y Snowflake.\n"
+    "HABILIDADES: Python, SQL, Django, Flask, FastAPI, AWS, GCP, Docker, Kubernetes, CI/CD, Linux, Snowflake, Apache Airflow, Spark, Pandas.\n"
+    "EXPERIENCIA:\n"
+    " - Big Data Engineer en COREBI (2024-2025): Diseño de pipelines en entornos cloud, Airflow y Spark para procesamiento masivo, optimización de flujos de datos.\n"
+    " - Developer Mobile & Data Engineer en AGNOSTIC IT (2022-2024): Backend para apps móviles en Python, integración de ML y dashboards en tiempo real.\n"
+    " - Network Administrator & Developer Mobile en CABLE NORTE S.A. (2019-2021): Automatización de procesos con Python, administración de redes y servidores.\n"
+    "EDUCACIÓN: Analista de Sistemas / Licenciatura en Sistemas (UNAM, 2015 - Actualidad). Bachiller en Administración de Empresas (INSTITUTO MARIANO MORENO).\n"
+    "IDIOMAS: Inglés avanzado."
+)
+# ----------------------------------------
 
 FEATURED_REPOS = [
     {
@@ -15,7 +30,7 @@ FEATURED_REPOS = [
         'description': "Proyecto de visión por computadora para reconocer gestos con la mano.",
         'html_url': "https://github.com/GeraMartinez94/Reconocimiento_gestos_Python",
         'language': "Python",
-        'updated_at': "2024-05-15T10:00:00Z" # Fecha solo para formato visual
+        'updated_at': "2024-05-15T10:00:00Z"
     },
     {
         'name': "Scrapting_Python",
@@ -39,18 +54,16 @@ FEATURED_REPOS = [
         'updated_at': "2024-02-10T10:00:00Z"
     },
       {
-        'name': "analyticsdevs_project", # El nombre del repositorio
+        'name': "analyticsdevs_project",
         'description': "El portafolio dinámico con Django, PythonAnywhere y GitHub.",
         'html_url': "https://github.com/GeraMartinez94/analyticsdevs_project",
         'language': "Python",
-        'updated_at': "2025-10-07T10:00:00Z" # Usa la fecha actual
+        'updated_at': "2025-10-07T10:00:00Z"
     }
 ]
 
 def contacto_view(request):
-    # Por ahora, solo renderiza la plantilla contacto.html
-    # Más adelante, aquí irá la lógica de tu formulario de contacto
-    return render(request, 'core/contacto.html', {}) 
+    return render(request, 'core/contacto.html', {})
 
 
 def get_language_color(language):
@@ -59,17 +72,13 @@ def get_language_color(language):
         "Python": "#3572A5", "JavaScript": "#f1e05a", "HTML": "#e34c26",
         "CSS": "#563d7c", "TypeScript": "#2b7489", "Jupyter Notebook": "#DA5B0B",
         "C#": "#178600", "PHP": "#4F5D95", "Java": "#b07219",
-        "Go": "#00ADD8", "Shell": "#89e051", "SQL": "#e38200", 
+        "Go": "#00ADD8", "Shell": "#89e051", "SQL": "#e38200",
     }
-    return colors.get(language, "#CCCCCC") 
+    return colors.get(language, "#CCCCCC")
 
 
 def get_github_data():
-    """
-    Obtiene lenguajes de forma estática y retorna los repositorios fijados desde la lista local.
-    Hemos eliminado las llamadas a la API que requieren el GITHUB_TOKEN.
-    """
-    
+    """Obtiene lenguajes de forma estática y repositorios fijados desde la lista local."""
 
     language_percentages = [
         {'language': 'Python', 'percent': 75.00, 'color': get_language_color('Python')},
@@ -79,54 +88,76 @@ def get_github_data():
     ]
 
     return {
-        'languages': language_percentages, # Usamos la lista estática
-        'featured_repos': FEATURED_REPOS,  # Usamos la lista local y segura
+        'languages': language_percentages,
+        'featured_repos': FEATURED_REPOS,
     }
 
-# --- LÓGICA DEL CHATBOT ---
+
+# ------------------------------------------------------------------
+# --- LÓGICA DEL CHATBOT CON CONVERSIÓN MARKDOWN A HTML ---
+# ------------------------------------------------------------------
 
 @require_http_methods(["POST"])
 def chat_api(request):
-    """Maneja la comunicación con la API de OpenAI."""
-    
-    # Se usa request.POST porque el HTML usa content-type application/x-form-urlencoded
-    user_message = request.POST.get('message', '') 
-    
+    """Maneja la comunicación con la API de Google Gemini y convierte la respuesta a HTML."""
+
+    user_message = request.POST.get('message', '')
+
     if not user_message:
         return JsonResponse({'error': 'No se proporcionó un mensaje.'}, status=400)
 
+    # CRÍTICO: Comprobación de la clave API que causa tu error de PythonAnywhere.
+    if not settings.GEMINI_API_KEY:
+        print("Error: GEMINI_API_KEY no está configurada en settings.py o como variable de entorno.")
+        return JsonResponse({'error': 'Error de configuración: Clave de API no configurada en el servidor. (Revisa settings.py)'}, status=500)
+
     try:
-        # Inicializa el cliente usando la clave cargada de settings.py
-        client = OpenAI(
-            api_key=settings.OPENAI_API_KEY,
-        )
-        
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "Eres un asistente IA amigable y experto en Analítica y Desarrollo de Software."},
-                {"role": "user", "content": user_message}
-            ],
-            temperature=0.7,
+        client = genai.Client(api_key=settings.GEMINI_API_KEY)
+
+        # *** PERSONALIDAD Y CONTEXTO DEL CV INCLUIDOS ***
+        system_instruction = (
+    f"INFORMACIÓN CLAVE SOBRE MÍ (Basada en el CV):\n---\n{CV_CONTENT}\n---\n\n"
+    " **Conservación del Idioma:** Debes responder **siempre** en el mismo idioma en que el usuario realizó la consulta. Si el prompt es en español, la respuesta es en español. Si el prompt es en inglés, la respuesta es en inglés. "
+    "Eres el asistente de Gerardo Martínez. Responde SIEMPRE basándote en la información que te he proporcionado en el CV. "
+    "Si te preguntan sobre mi experiencia, habilidades (ej: *Python*, *Django*, *Snowflake*, *Airflow*, *AWS*), o proyectos, usa el contexto del CV. "
+    "Tu objetivo es responder preguntas sobre mi portafolio y habilidades de forma profesional y concisa, hablando siempre en primera persona. "
+    "**SIEMPRE utiliza formato Markdown (como **negritas**, *cursivas*, y listas con *) para resaltar conceptos clave.**"
+)
+
+        response = client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=user_message,
+            config=types.GenerateContentConfig(
+                system_instruction=system_instruction,
+                temperature=0.7
+            )
         )
 
-        bot_reply = response.choices[0].message.content
-        
+        markdown_text = response.text
+        bot_reply = markdown.markdown(markdown_text)
+
         return JsonResponse({'reply': bot_reply})
 
+    except genai.errors.APIError as e:
+        error_message = f"Error de Gemini API: {e}. Revisa tu cuota o clave."
+        print(error_message)
+        return JsonResponse({'error': 'Lo siento, el asistente IA está experimentando problemas. Revisa tu cuota de uso en Google.'}, status=500)
+
     except Exception as e:
-        print(f"Error al conectar con OpenAI: {e}")
-        return JsonResponse({'error': 'Lo siento, el asistente IA está experimentando problemas técnicos.'}, status=500)
+        print(f"Error desconocido al conectar con Gemini: {e}")
+        return JsonResponse({'error': 'Error interno del servidor.'}, status=500)
 
 
-# --- VISTA PRINCIPAL (Corregida: se eliminó el duplicado) ---
+# ------------------------------------------------------------------
+# --- VISTA PRINCIPAL ---
+# ------------------------------------------------------------------
 
 def home_view(request):
     """Vista principal que renderiza la página y pasa los datos de GitHub."""
-    
+
     data = get_github_data()
     languages = data['languages']
-    
+
     # Prepara los datos para el conic-gradient de CSS (Gráfico de Torta)
     current_stop = 0
     gradient_parts = []
@@ -136,14 +167,11 @@ def home_view(request):
         current_stop = next_stop
 
     gradient_string = ", ".join(gradient_parts)
-    
+
     context = {
-        'messages': request.GET.getlist('messages'), 
         'languages': languages,
         'gradient_string': gradient_string,
         'featured_repos': data['featured_repos'],
-        # ¡IMPORTANTE! Necesitamos el token CSRF para el fetch en el HTML
-        'csrf_token': request.META.get('CSRF_COOKIE', ''), 
     }
-    
+
     return render(request, 'home.html', context)

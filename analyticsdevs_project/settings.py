@@ -1,9 +1,10 @@
 import os # Importar para usar os.environ.get y definir rutas
 from pathlib import Path
 from dotenv import load_dotenv # Importar para leer el archivo .env
-
+from decouple import config
+GEMINI_API_KEY = config('GEMINI_API_KEY', default=None)
 # Cargar variables de entorno desde el archivo .env (solo funciona localmente)
-load_dotenv() 
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -12,14 +13,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # Lee la SECRET_KEY de las variables de entorno (en .env o en el panel de PA)
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-tu-clave-por-defecto') 
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-tu-clave-por-defecto')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Lee el estado de DEBUG de las variables de entorno
-DEBUG = os.environ.get('DEBUG', 'True') == 'True' 
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 # Permite hosts de desarrollo y el dominio de PythonAnywhere (GeraMar94.pythonanywhere.com)
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'GeraMar94.pythonanywhere.com'] 
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'GeraMar94.pythonanywhere.com']
 
 # Application definition
 
@@ -52,7 +52,7 @@ ROOT_URLCONF = 'analyticsdevs_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [], 
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -113,7 +113,7 @@ STATIC_URL = '/static/'
 
 # Directorios donde Django busca archivos estáticos en desarrollo (core/static)
 STATICFILES_DIRS = [
-    BASE_DIR / 'core/static', 
+    BASE_DIR / 'core/static',
 ]
 
 # ----------------------------------------------------------------------
@@ -121,7 +121,7 @@ STATICFILES_DIRS = [
 # ----------------------------------------------------------------------
 
 # Directorio donde 'collectstatic' reunirá todos los archivos estáticos.
-STATIC_ROOT = BASE_DIR / 'staticfiles' 
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 
@@ -137,28 +137,27 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # La contraseña de aplicación de Google o la contraseña del host SMTP.
 # Si el envío falla, revisa que EMAIL_HOST_PASSWORD esté definido en tu .env o en el entorno de PythonAnywhere.
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD') 
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 # El correo que usará Django para autenticarse (debe ser la cuenta del servicio SMTP).
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER') 
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 
 # Solo activa el envío real si las credenciales están presentes
 if EMAIL_HOST_USER and EMAIL_HOST_PASSWORD:
-    
+
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    
+
     # Configuración del servidor (usaremos Gmail como ejemplo por defecto)
     EMAIL_HOST = 'smtp.gmail.com'
     EMAIL_PORT = 587
     EMAIL_USE_TLS = True
-    
+
     # Remitentes por defecto (usando la cuenta de envío)
     DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
     SERVER_EMAIL = EMAIL_HOST_USER
-    
+
     # DEBUG: Si la clave no está presente, Django no intentará enviar correos.
 else:
     # Si las variables no están cargadas, usamos el backend de consola para que no falle.
     # Los correos se imprimirán en la consola de Django.
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-    
