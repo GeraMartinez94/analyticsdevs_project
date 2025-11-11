@@ -25,13 +25,20 @@ CV_CONTENT = (
 # ----------------------------------------
 
 FEATURED_REPOS = [
-    {
+   {
         'name': "Reconocimiento_gestos_Python",
         'description': "Proyecto de visión por computadora para reconocer gestos con la mano.",
         'html_url': "https://github.com/GeraMartinez94/Reconocimiento_gestos_Python",
         'language': "Python",
         'updated_at': "2024-05-15T10:00:00Z"
     },
+   {
+    'name': "MLOps: Gobernanza de Modelos (MLflow)",
+    'description': "Implementación de un pipeline MLOps modular para el Clasificador de Prioridad. Demuestra Tracking, Versionamiento y Registro de Modelos con MLflow. La arquitectura es compatible con entornos Lakehouse (Snowflake) y orquestadores (dbt/Airflow).",
+    'html_url': "https://github.com/GeraMartinez94/mlops-mlflow-priority-classifier", 
+    'language': "Python",
+    'updated_at': "2025-11-11T03:30:00Z" 
+},
     {
         'name': "Scrapting_Python",
         'description': "Scripts y herramientas para la extracción de datos de la web.",
