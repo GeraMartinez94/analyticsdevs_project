@@ -1,4 +1,5 @@
 import os # Importar para usar os.environ.get y definir rutas
+import json
 from pathlib import Path
 from dotenv import load_dotenv # Importar para leer el archivo .env
 from decouple import config
@@ -60,6 +61,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'analyticsdevs_project.context_processors.ga_settings',
             ],
         },
     },
@@ -161,3 +163,30 @@ else:
     # Si las variables no están cargadas, usamos el backend de consola para que no falle.
     # Los correos se imprimirán en la consola de Django.
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+# -----------------------------
+# Google Analytics settings
+# -----------------------------
+# Se pueden configurar mediante variables de entorno o en un archivo .env local.
+# - GA_MEASUREMENT_ID: ID de medición para gtag.js (por ejemplo: G-XXXXXXX)
+# - GA_PROPERTY_ID: ID de la propiedad (numérica) si es necesario
+# - GA_SERVICE_ACCOUNT_PATH: ruta al archivo JSON de la cuenta de servicio (servidor)
+# - GA_SERVICE_ACCOUNT_JSON: contenido JSON de la cuenta de servicio (útil en despliegues donde no se puede subir archivos)
+
+GA_MEASUREMENT_ID = os.environ.get('GA_MEASUREMENT_ID')
+GA_PROPERTY_ID = os.environ.get('GA_PROPERTY_ID')
+GA_SERVICE_ACCOUNT_PATH = os.environ.get('GA_SERVICE_ACCOUNT_PATH')
+# Si prefieres inyectar el JSON completo en una variable de entorno, úsalo así:
+GA_SERVICE_ACCOUNT_JSON = os.environ.get('GA_SERVICE_ACCOUNT_JSON')
+
+# Si se pasa la variable `GA_SERVICE_ACCOUNT_JSON` como string JSON, intenta parsearla
+GA_SERVICE_ACCOUNT = None
+if GA_SERVICE_ACCOUNT_JSON:
+    try:
+        GA_SERVICE_ACCOUNT = json.loads(GA_SERVICE_ACCOUNT_JSON)
+    except Exception:
+        GA_SERVICE_ACCOUNT = None
+
+# Helper boolean to know if analytics is configured for templates or server-side
+GA_ENABLED = bool(GA_MEASUREMENT_ID or GA_SERVICE_ACCOUNT_PATH or GA_SERVICE_ACCOUNT)

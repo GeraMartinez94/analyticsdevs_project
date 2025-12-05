@@ -3,6 +3,13 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1FRYCJXRB1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-1FRYCJXRB1');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portafolio Profesional - AnalyticsDevs</title>
@@ -380,6 +387,16 @@
             }
         }
     </style>
+{% if GA_ENABLED and GA_MEASUREMENT_ID %}
+<!-- Google Analytics (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ GA_MEASUREMENT_ID }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '{{ GA_MEASUREMENT_ID }}', { 'anonymize_ip': true });
+</script>
+{% endif %}
 </head>
 
 <body>
