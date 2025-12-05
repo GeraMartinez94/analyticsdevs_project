@@ -167,18 +167,33 @@ else:
 
 # -----------------------------
 # Google Analytics settings
-# -----------------------------
-# Se pueden configurar mediante variables de entorno o en un archivo .env local.
+# Configuración flexible: lee desde config/ga_config.json (con fallback a .env)
+# Se pueden configurar mediante:
+# 1. Archivo: config/ga_config.json (recomendado para producción)
+# 2. Variables de entorno o .env local (desarrollo)
+# Campos soportados:
 # - GA_MEASUREMENT_ID: ID de medición para gtag.js (por ejemplo: G-XXXXXXX)
 # - GA_PROPERTY_ID: ID de la propiedad (numérica) si es necesario
 # - GA_SERVICE_ACCOUNT_PATH: ruta al archivo JSON de la cuenta de servicio (servidor)
-# - GA_SERVICE_ACCOUNT_JSON: contenido JSON de la cuenta de servicio (útil en despliegues donde no se puede subir archivos)
+# - GA_SERVICE_ACCOUNT_JSON: contenido JSON de la cuenta de servicio (string)
+# -----------------------------
 
-GA_MEASUREMENT_ID = os.environ.get('GA_MEASUREMENT_ID')
-GA_PROPERTY_ID = os.environ.get('GA_PROPERTY_ID')
-GA_SERVICE_ACCOUNT_PATH = os.environ.get('GA_SERVICE_ACCOUNT_PATH')
-# Si prefieres inyectar el JSON completo en una variable de entorno, úsalo así:
-GA_SERVICE_ACCOUNT_JSON = os.environ.get('GA_SERVICE_ACCOUNT_JSON')
+# Intentar cargar config desde config/ga_config.json primero
+GA_CONFIG = {}
+GA_CONFIG_FILE = BASE_DIR / 'config' / 'ga_config.json'
+if GA_CONFIG_FILE.exists():
+    try:
+        with open(GA_CONFIG_FILE, 'r') as f:
+            GA_CONFIG = json.load(f)
+    except Exception as e:
+        print(f"Warning: Could not load GA config from {GA_CONFIG_FILE}: {e}")
+        GA_CONFIG = {}
+
+# Leer valores con prioridad: config/ga_config.json > variables de entorno
+GA_MEASUREMENT_ID = GA_CONFIG.get('GA_MEASUREMENT_ID') or os.environ.get('GA_MEASUREMENT_ID')
+GA_PROPERTY_ID = GA_CONFIG.get('GA_PROPERTY_ID') or os.environ.get('GA_PROPERTY_ID')
+GA_SERVICE_ACCOUNT_PATH = GA_CONFIG.get('GA_SERVICE_ACCOUNT_PATH') or os.environ.get('GA_SERVICE_ACCOUNT_PATH')
+GA_SERVICE_ACCOUNT_JSON = GA_CONFIG.get('GA_SERVICE_ACCOUNT_JSON') or os.environ.get('GA_SERVICE_ACCOUNT_JSON')
 
 # Si se pasa la variable `GA_SERVICE_ACCOUNT_JSON` como string JSON, intenta parsearla
 GA_SERVICE_ACCOUNT = None

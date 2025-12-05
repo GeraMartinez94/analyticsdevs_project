@@ -17,3 +17,5 @@ db.sqlite3
 # ----------------------------------
 # ¡CRUCIAL! Excluye el archivo que contiene tu token real.
 .env
+# Excluir archivo de configuración de Google Analytics (contiene credenciales)
+config/ga_config.json
