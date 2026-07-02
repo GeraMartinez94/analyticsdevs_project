@@ -12,7 +12,7 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portafolio Profesional - AnalyticsDevs</title>
+    <title>Portafolio Profesional</title>
     
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -410,17 +410,14 @@
         {% endfor %}
     </div>
 
-    <nav class="navbar">
+    <!-- Navbar removed as requested -->
+    <header class="site-header">
         <div class="container">
-            <a href="#inicio" class="logo">AnalyticsDevs</a>
-            <div class="nav-links">
-                <a href="#portafolio">Portafolio</a>
-                <a href="#eventos">Eventos</a>
-                <a href="#servicios">Servicios</a>
-                <a href="#contacto">Contacto</a>
+            <div class="site-branding">
+                <h1 class="site-title">Portafolio Profesional</h1>
             </div>
         </div>
-    </nav>
+    </header>
 
     <section class="hero-section" id="inicio">
         <div class="container" data-aos="fade-up" data-aos-duration="1200">
@@ -463,21 +460,33 @@
             <div class="case-study-grid">
                 {% for repo in featured_repos %}
                     <a href="{{ repo.html_url }}" target="_blank" class="project-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 | stringformat:'i' }}00">
-                        <div class="card-header">
-                            <h3>{{ repo.name }}</h3>
-                        </div>
-                        <span class="language-tag" style="background-color: {{ repo.language | get_language_color_filter }};">
-                            {{ repo.language }}
-                        </span>
-                        <p class="project-description">
-                            {% if repo.description %}
-                                {{ repo.description }}
+                        <div class="card-media" style="--lang-color: {{ repo.language | get_language_color_filter }};">
+                            {% if repo.image %}
+                                <img class="card-media-img" src="{% static repo.image %}" alt="{{ repo.name }}">
+                            {% elif repo.og_image %}
+                                <img class="card-media-img" src="{{ repo.og_image }}" alt="{{ repo.name }}">
                             {% else %}
-                                No hay descripción disponible.
+                                <div class="media-initials">{{ repo.name|slice:":2"|upper }}</div>
                             {% endif %}
-                        </p>
+                            <div class="media-overlay">
+                                <span class="language-badge" style="background-color: {{ repo.language | get_language_color_filter }}">{{ repo.language }}</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="project-title">{{ repo.name }}</h3>
+                            <p class="project-description">
+                                {% if repo.description %}
+                                    {{ repo.description }}
+                                {% else %}
+                                    No hay descripción disponible.
+                                {% endif %}
+                            </p>
+                        </div>
                         <div class="card-footer">
                             <small>Última actualización: {% if repo.updated_at %}{{ repo.updated_at|date:"d M Y" }}{% else %}N/A{% endif %}</small>
+                            <div class="project-actions">
+                                <span class="view-repo">Ver en GitHub</span>
+                            </div>
                         </div>
                     </a>
                 {% empty %}
@@ -489,81 +498,9 @@
         </div>
     </section>
 
-    <section class="events-section" id="eventos">
-        <div class="container">
-            <h2 class="section-title text-center title-accent-line" data-aos="fade-down">Próximos Eventos y Webinars</h2>
-            <div class="event-grid">
-                <div class="event-card-item" data-aos="fade-up">
-                    <div class="card-header-event header-python"> PYTHON & IA </div>
-                    <div class="card-body-event">
-                        <h3 class="card-title-event">Debate: El Futuro de Python en Analítica</h3>
-                        <p class="card-description-event">
-                            Analizaremos las tendencias de librerías como Pandas, Polars y la integración con Inteligencia Artificial. Ideal para desarrolladores y analistas de datos.
-                        </p>
-                        <div class="card-footer-event">
-                            <p class="event-meta-date"><i class="fas fa-calendar-alt"></i> A definir</p>
-                            <div class="calendar-add-links">
-                                <span class="status-message">En Desarrollo</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="event-card-item" data-aos="fade-up" data-aos-delay="200">
-                    <div class="card-header-event header-data-viz"> DATA VIZ </div>
-                    <div class="card-body-event">
-                        <h3 class="card-title-event">Webinar: Visualización Avanzada en Python</h3>
-                        <p class="card-description-event">
-                            Aprende a crear gráficos interactivos y estéticamente superiores usando Matplotlib, Seaborn y Plotly. Transforma datos crudos en historias visuales impactantes.
-                        </p>
-                        <div class="card-footer-event">
-                            <p class="event-meta-date"><i class="fas fa-calendar-alt"></i> A definir</p>
-                            <span class="status-message">En Desarrollo</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="event-card-item" data-aos="fade-up" data-aos-delay="400">
-                    <div class="card-header-event header-django"> DJANGO </div>
-                    <div class="card-body-event">
-                        <h3 class="card-title-event">Workshop: Fundamentos de Django para Analistas</h3>
-                        <p class="card-description-event">
-                            Un "quick-start" para usar Django REST Framework y servir tus modelos predictivos o dashboards de Python a través de una API robusta y segura.
-                        </p>
-                        <div class="card-footer-event">
-                            <p class="event-meta-date"><i class="fas fa-calendar-alt"></i> A definir</p>
-                            <span class="status-message">En Desarrollo</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <p class="small-note-events text-center" style="margin-top: 40px;">
-                *Plazas limitadas. Se enviará el link de acceso por email.
-            </p>
-        </div>
-    </section>
+    <!-- Sección 'Próximos Eventos' eliminada por solicitud del usuario -->
 
-    <section class="services-section" id="servicios">
-        <div class="container text-center" data-aos="fade-right">
-            <h2 class="title-accent-line">Nuestros Servicios de Consultoría</h2>
-            <div class="services-grid">
-                <div class="service-item" data-aos="zoom-in-right">
-                    <h3>Consultoría en Data</h3>
-                    <p>Análisis avanzado y desarrollo de pipelines de datos.</p>
-                </div>
-                <div class="service-item" data-aos="zoom-in-left">
-                    <h3>Desarrollo Web (Django)</h3>
-                    <p>Construcción de aplicaciones web robustas y escalables.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="contacto" class="contact-section text-center">
-        <div class="container">
-            <h2 class="title-accent-line">Hablemos de tu Proyecto</h2>
-            <p class="subtitle">Agenda una reunión gratuita de 15 minutos para discutir tus necesidades y objetivos.</p>
-            <a href="{% url 'contacto' %}" class="btn btn-cta">Agenda una Consulta Gratuita</a>
-        </div>
-    </section>
+    <!-- Servicios and Contact sections removed as requested -->
 
     <footer>
         <div class="container">

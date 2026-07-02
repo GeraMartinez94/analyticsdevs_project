@@ -29,7 +29,8 @@ FEATURED_REPOS = [
         'name': "Reconocimiento_gestos_Python",
         'description': "Proyecto de visión por computadora para reconocer gestos con la mano.",
         'html_url': "https://github.com/GeraMartinez94/Reconocimiento_gestos_Python",
-        'language': "Python",
+       'language': "Python",
+       'image': 'img/projects/reconocimiento_gestos.svg',
         'updated_at': "2024-05-15T10:00:00Z"
     },
    {
@@ -37,6 +38,7 @@ FEATURED_REPOS = [
     'description': "Implementación de un pipeline MLOps modular para el Clasificador de Prioridad. Demuestra Tracking, Versionamiento y Registro de Modelos con MLflow. La arquitectura es compatible con entornos Lakehouse (Snowflake) y orquestadores (dbt/Airflow).",
     'html_url': "https://github.com/GeraMartinez94/mlops-mlflow-priority-classifier", 
     'language': "Python",
+    'image': 'img/projects/mlops_mlflow.svg',
     'updated_at': "2025-11-11T03:30:00Z" 
 },
     {
@@ -44,6 +46,7 @@ FEATURED_REPOS = [
         'description': "Scripts y herramientas para la extracción de datos de la web.",
         'html_url': "https://github.com/GeraMartinez94/Scrapting_Python",
         'language': "Python",
+        'image': 'img/projects/scrapting_python.svg',
         'updated_at': "2024-04-01T10:00:00Z"
     },
     {
@@ -51,6 +54,7 @@ FEATURED_REPOS = [
         'description': "Análisis de datos, visualización y modelos predictivos en Python.",
         'html_url': "https://github.com/GeraMartinez94/Data-Analytics-Python",
         'language': "Python",
+        'image': 'img/projects/data_analytics.svg',
         'updated_at': "2024-03-20T10:00:00Z"
     },
     {
@@ -58,6 +62,7 @@ FEATURED_REPOS = [
         'description': "Proyectos con interfaz gráfica usando Tkinter o PyQt.",
         'html_url': "https://github.com/GeraMartinez94/Project_graphic_python",
         'language': "Python",
+        'image': 'img/projects/project_graphic.svg',
         'updated_at': "2024-02-10T10:00:00Z"
     },
       {
@@ -65,6 +70,7 @@ FEATURED_REPOS = [
         'description': "El portafolio dinámico con Django, PythonAnywhere y GitHub.",
         'html_url': "https://github.com/GeraMartinez94/analyticsdevs_project",
         'language': "Python",
+        'image': 'img/projects/analyticsdevs_project.svg',
         'updated_at': "2025-10-07T10:00:00Z"
     }
 ]
@@ -164,6 +170,17 @@ def home_view(request):
 
     data = get_github_data()
     languages = data['languages']
+    # Añadir una imagen representativa por defecto (OpenGraph de GitHub) cuando no haya imagen local
+    for repo in data['featured_repos']:
+        html_url = repo.get('html_url', '')
+        try:
+            path = html_url.split('github.com/')[-1].strip('/')
+            if path:
+                repo['og_image'] = f"https://opengraph.githubassets.com/1/{path}"
+            else:
+                repo['og_image'] = ''
+        except Exception:
+            repo['og_image'] = ''
 
     # Prepara los datos para el conic-gradient de CSS (Gráfico de Torta)
     current_stop = 0
