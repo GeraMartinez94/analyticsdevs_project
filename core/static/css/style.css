@@ -139,27 +139,60 @@ h2 {
     top: 0;
     left: 0;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.12);
-    backdrop-filter: blur(5px);
     z-index: 1000;
+    padding: 18px 0;
 }
 .site-header .container {
     display: flex;
     align-items: center;
-    padding: 18px 15px;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: rgba(15, 23, 42, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+    backdrop-filter: blur(10px);
+}
+.site-branding {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.site-brand-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+    color: var(--light-text);
+    font-size: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 .site-title {
     font-family: 'Poppins', sans-serif;
-    font-size: 1.6rem;
+    font-size: 1.2rem;
     color: var(--light-text);
     margin: 0;
     font-weight: 700;
+    line-height: 1.1;
+}
+.site-tagline {
+    margin: 2px 0 0;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.8);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
 }
 
 /* mobile adjustments */
 @media (max-width: 768px) {
-    .site-header .container { padding: 12px 12px; }
-    .site-title { font-size: 1.15rem; }
+    .site-header { padding: 14px 0; }
+    .site-header .container { padding: 12px 14px; border-radius: 20px; }
+    .site-title { font-size: 1rem; }
+    .site-tagline { font-size: 0.7rem; }
+    .site-brand-mark { width: 32px; height: 32px; font-size: 0.9rem; }
 }
 
 
