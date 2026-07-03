@@ -19,7 +19,7 @@ CV_CONTENT = (
     "aplicados de MLOps (pipeline end-to-end con MLflow, tracking y versionamiento de modelos, integrado "
     "con Snowflake/Airflow), visión por computadora (reconocimiento de gestos en tiempo real) y un chatbot "
     "de IA integrado como asistente virtual del propio sitio.\n"
-    "CONTACTO: Posadas, Misiones, Argentina. Email: geramartinez450@gmail.com | Tel: +54 9 3764 632827 | "
+    "CONTACTO: Posadas, Misiones, Argentina. Email: geramartinez450@gmail.com | "
     "Portafolio: geramar94.pythonanywhere.com | GitHub: github.com/GeraMartinez94\n"
     "HABILIDADES:\n"
     " - Lenguajes y Frameworks: Python, Django, Flask, FastAPI, Laravel, Angular, React, React Native.\n"
