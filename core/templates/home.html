@@ -224,7 +224,7 @@
             background-color: #adb5bd; 
             border-radius: 50%;
             opacity: 0.7;
-            animation: bounce 1.4s infinite ease-in-out;
+            animation: bounce infinite ease-in-out;
         }
         .typing-indicator:nth-child(1) { animation-delay: -0.32s; }
         .typing-indicator:nth-child(2) { animation-delay: -0.16s; }
@@ -385,6 +385,10 @@
                 /* Centrado horizontal al abrir */
                 transform: translateX(-50%) scale(1);
             }
+            
+            .skills-grid {
+                flex-direction: column;
+            }
         }
     </style>
 {% if GA_ENABLED and GA_MEASUREMENT_ID %}
@@ -416,6 +420,7 @@
                 <span class="site-brand-mark">✦</span>
                 <div>
                     <h1 class="site-title">Portafolio Profesional</h1>
+                 
                     <p class="site-tagline">Data Analytics • Python • Django</p>
                 </div>
             </div>
@@ -425,10 +430,12 @@
     <section class="hero-section" id="inicio">
         <div class="container" data-aos="fade-up" data-aos-duration="1200">
             <div class="hero-content">
-                <h1 data-aos="fade-up" class="title-accent-line">Analítica y Desarrollo de Software</h1>
-                <p class="subtitle" data-aos="fade-up" data-aos-delay="300">
-                    Transformando datos en soluciones inteligentes con Python y Django.
-                </p>
+                <h1 data-aos="fade-up" class="title-accent-line">Martinez Gerardo Guillermo</h1>
+                <div class="skills-highlight" style="margin-bottom: 25px;">
+                <span style="color: #ffffff; opacity: 0.8; font-weight: 300; letter-spacing: 2px;">
+                    PYTHON • DATA ENGINEERING • DJANGO • CLOUD ARCHITECTURE
+                </span>
+            </div>
                 <a href="#portafolio" class="btn btn-primary" data-aos="zoom-in" data-aos-delay="500">Ver Proyectos</a>
             </div>
         </div>
@@ -454,6 +461,39 @@
                 </div>
             </div>
             <p class="legend-note">Datos obtenidos directamente de la API de GitHub.</p>
+        </div>
+    </section>
+
+    <!-- SECCIÓN DE HABILIDADES TÉCNICAS AGREGADA -->
+    <section class="skills-list-section" id="habilidades" style="padding: 60px 0;">
+        <div class="container">
+            <h2 class="text-center title-accent-line" data-aos="fade-up" style="margin-bottom: 20px;">Habilidades Técnicas</h2>
+            <div class="skills-grid" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-top: 40px;" data-aos="fade-up" data-aos-delay="200">
+                <div class="skills-category" style="background: #2c2f33; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); min-width: 280px; flex: 1;">
+                    <h3 style="color: var(--primary-color); margin-bottom: 15px; font-size: 1.2em; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;"><i class="fas fa-code"></i> Lenguajes y Frameworks</h3>
+                    <ul style="list-style: none; padding: 0; margin: 0; color: var(--text-color); line-height: 1.8;">
+                        <li><i class="fas fa-check" style="color: var(--primary-color); margin-right: 8px; font-size: 0.8em;"></i> Python, Laravel, Django</li>
+                        <li><i class="fas fa-check" style="color: var(--primary-color); margin-right: 8px; font-size: 0.8em;"></i> Flask, FastAPI, Angular</li>
+                        <li><i class="fas fa-check" style="color: var(--primary-color); margin-right: 8px; font-size: 0.8em;"></i> React, React Native</li>
+                    </ul>
+                </div>
+                <div class="skills-category" style="background: #2c2f33; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); min-width: 280px; flex: 1;">
+                    <h3 style="color: var(--primary-color); margin-bottom: 15px; font-size: 1.2em; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;"><i class="fas fa-cloud"></i> Cloud & DevOps</h3>
+                    <ul style="list-style: none; padding: 0; margin: 0; color: var(--text-color); line-height: 1.8;">
+                        <li><i class="fas fa-check" style="color: var(--primary-color); margin-right: 8px; font-size: 0.8em;"></i> AWS, GCP, Docker</li>
+                        <li><i class="fas fa-check" style="color: var(--primary-color); margin-right: 8px; font-size: 0.8em;"></i> Kubernetes, CI/CD</li>
+                        <li><i class="fas fa-check" style="color: var(--primary-color); margin-right: 8px; font-size: 0.8em;"></i> Linux, Terraform</li>
+                    </ul>
+                </div>
+                <div class="skills-category" style="background: #2c2f33; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); min-width: 280px; flex: 1;">
+                    <h3 style="color: var(--primary-color); margin-bottom: 15px; font-size: 1.2em; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;"><i class="fas fa-database"></i> Bases de Datos & Data</h3>
+                    <ul style="list-style: none; padding: 0; margin: 0; color: var(--text-color); line-height: 1.8;">
+                        <li><i class="fas fa-check" style="color: var(--primary-color); margin-right: 8px; font-size: 0.8em;"></i> Snowflake, SQL</li>
+                        <li><i class="fas fa-check" style="color: var(--primary-color); margin-right: 8px; font-size: 0.8em;"></i> Apache Airflow</li>
+                        <li><i class="fas fa-check" style="color: var(--primary-color); margin-right: 8px; font-size: 0.8em;"></i> Spark / Databricks, Pandas</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </section>
 
