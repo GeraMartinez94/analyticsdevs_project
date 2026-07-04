@@ -13,58 +13,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portafolio Profesional</title>
-    
+
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
+
     <style>
         /* ==================================== */
         /* === ESTILOS DEL CHATBOT (CRÍTICOS Y UNIFICADOS) - DARK/LIGHT MODE === */
         /* ==================================== */
 
-        /* 1. VARIABLES BASE (DARK MODE POR DEFECTO) */
+        /* 1. VARIABLES BASE (DARK MODE POR DEFECTO) — con acento en gradiente */
         :root {
-            --primary-color: #007bff; 
-            --secondary-color: #212529; 
-            --user-bubble-bg: #007bff; 
-            --bot-bubble-bg: #3c4146; 
-            --text-color: #FFFFFF; 
-            --border-color: #495057; 
-            --input-bg: #495057; 
-            --header-bg: #000000; 
+            --primary-color: #6366f1;
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --secondary-color: #16181d;
+            --user-bubble-bg: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
+            --bot-bubble-bg: #262a31;
+            --text-color: #F5F5F7;
+            --border-color: #33373f;
+            --input-bg: #1f2228;
+            --header-bg: #16181d;
         }
 
         /* 2. VARIABLES LIGHT MODE */
         .chat-widget-container.light-mode {
-            --secondary-color: #f8f9fa; 
-            --bot-bubble-bg: #e9ecef; 
-            --text-color: #212529; 
-            --input-bg: #ffffff; 
-            --border-color: #dee2e6;
+            --secondary-color: #f7f7fa;
+            --bot-bubble-bg: #ffffff;
+            --text-color: #1a1a1e;
+            --input-bg: #ffffff;
+            --border-color: #e5e5ea;
             --header-bg: #ffffff;
         }
         .chat-widget-container.light-mode .user-message {
-            background-color: #007bff; 
+            background: var(--user-bubble-bg);
             color: white;
         }
 
-        /* Botón flotante (Sin cambios) */
+        /* Botón flotante — con gradiente y glow sutil */
         .chatbot-toggle-button {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            width: 60px;
-            height: 60px;
-            background-color: var(--primary-color);
+            width: 62px;
+            height: 62px;
+            background: var(--primary-gradient);
             color: white;
             border: none;
             border-radius: 50%;
-            font-size: 1.8em;
+            font-size: 1.6em;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); 
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
             z-index: 1000;
-            transition: transform 0.3s, background-color 0.3s, opacity 1s;
+            transition: transform 0.3s, box-shadow 0.3s, opacity 1s;
             opacity: 0;
             transform: translateY(20px);
         }
@@ -73,8 +74,8 @@
             transform: translateY(0);
         }
         .chatbot-toggle-button:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
+            transform: scale(1.08);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.55);
         }
 
         /* Contenedor del Chatbot - Dark/Light Mode (Anclado a la derecha en escritorio) */
@@ -83,47 +84,61 @@
             bottom: 90px;
             right: 30px;
             left: auto; /* Asegura que se ancle a la derecha por defecto */
-            width: 380px; 
-            height: 550px; 
-            background: var(--secondary-color); 
-            border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5); 
+            width: 380px;
+            height: 560px;
+            background: var(--secondary-color);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+            border: 1px solid var(--border-color);
             z-index: 1001;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             opacity: 0;
-            transform: scale(0.9); 
+            transform: scale(0.92) translateY(10px);
             pointer-events: none;
-            transition: opacity 0.3s cubic-bezier(0.2, 0.6, 0.3, 1), transform 0.3s cubic-bezier(0.2, 0.6, 0.3, 1);
+            transition: opacity 0.35s cubic-bezier(0.2, 0.6, 0.3, 1), transform 0.35s cubic-bezier(0.2, 0.6, 0.3, 1);
         }
         .chat-widget-container.open {
             opacity: 1;
-            transform: scale(1); 
+            transform: scale(1) translateY(0);
             pointer-events: auto;
         }
 
-        /* Encabezado del Chat - CON SWITCH TOGGLE */
+        /* Encabezado del Chat - CON AVATAR Y SWITCH TOGGLE */
         .chat-header {
-            background: var(--header-bg); 
-            color: var(--text-color); 
-            padding: 10px 15px; 
-            font-size: 1.15em;
+            background: var(--header-bg);
+            color: var(--text-color);
+            padding: 14px 16px;
+            font-size: 1.05em;
             font-weight: 600;
             display: flex;
             align-items: center;
-            justify-content: space-between; 
+            justify-content: space-between;
             border-bottom: 1px solid var(--border-color);
         }
         .chat-header .robot-icon {
             display: flex;
             align-items: center;
+            gap: 10px;
         }
-        .chat-header i {
-            margin-right: 8px;
-            color: var(--primary-color);
+        .chat-header .robot-icon .avatar-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.95em;
+            flex-shrink: 0;
         }
-        
+        .chat-header i.fas.fa-robot {
+            margin: 0;
+            color: white;
+        }
+
         /* === ESTILOS DEL SWITCH TOGGLE === */
         .theme-switch-wrapper {
             display: flex;
@@ -140,7 +155,7 @@
         }
 
         .slider {
-            background-color: #adb5bd; 
+            background-color: #adb5bd;
             bottom: 0;
             cursor: pointer;
             left: 0;
@@ -162,7 +177,7 @@
             border-radius: 50%;
         }
         input:checked + .slider {
-             background-color: var(--primary-color); 
+             background: var(--primary-gradient);
         }
         input:checked + .slider:before {
             transform: translateX(20px);
@@ -175,35 +190,40 @@
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            background-color: var(--secondary-color); 
+            background-color: var(--secondary-color);
             border-bottom: 1px solid var(--border-color);
         }
         .chat-message {
-            margin: 8px 0;
-            padding: 12px 15px; 
-            border-radius: 18px; 
-            max-width: 85%; 
-            font-size: 0.95em;
-            line-height: 1.5; 
-            transition: all 0.2s ease-in-out; 
-            color: var(--text-color); 
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15); 
+            margin: 6px 0;
+            padding: 12px 16px;
+            border-radius: 18px;
+            max-width: 82%;
+            font-size: 0.93em;
+            line-height: 1.55;
+            transition: all 0.2s ease-in-out;
+            color: var(--text-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            animation: messageIn 0.25s ease-out;
+        }
+        @keyframes messageIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .user-message {
-            background-color: var(--user-bubble-bg);
+            background: var(--user-bubble-bg);
             color: white;
             align-self: flex-end;
             margin-left: auto;
-            border-bottom-right-radius: 4px; 
+            border-bottom-right-radius: 6px;
         }
         .bot-message {
             background-color: var(--bot-bubble-bg);
-            color: var(--text-color); 
+            color: var(--text-color);
             align-self: flex-start;
             margin-right: auto;
-            border-bottom-left-radius: 4px; 
+            border-bottom-left-radius: 6px;
         }
-        
+
         /* Estilos para Listas */
         .bot-message ul {
             padding-left: 20px;
@@ -215,24 +235,35 @@
             list-style-type: disc;
         }
 
-        /* Animación de Typing */
+        /* Indicador de "escribiendo" con etiqueta DevIA */
+        .loading-spinner-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .typing-label {
+            font-size: 0.82em;
+            color: var(--text-color);
+            opacity: 0.65;
+            margin-right: 2px;
+        }
         .typing-indicator {
             display: inline-block;
             margin: 0 2px;
             width: 8px;
             height: 8px;
-            background-color: #adb5bd; 
+            background-color: #adb5bd;
             border-radius: 50%;
             opacity: 0.7;
             animation: bounce infinite ease-in-out;
         }
-        .typing-indicator:nth-child(1) { animation-delay: -0.32s; }
-        .typing-indicator:nth-child(2) { animation-delay: -0.16s; }
+        .typing-indicator:nth-child(2) { animation-delay: -0.32s; }
+        .typing-indicator:nth-child(3) { animation-delay: -0.16s; }
         @keyframes bounce {
             0%, 80%, 100% { transform: scale(0); }
             40% { transform: scale(1.0); }
         }
-        
+
         /* Footer del Chat y botón de reinicio */
         .chat-footer {
             display: flex;
@@ -241,7 +272,7 @@
             background-color: var(--secondary-color);
         }
         .clear-chat-button {
-            background: #495057; 
+            background: #495057;
             color: white;
             border: none;
             padding: 0 12px;
@@ -249,7 +280,7 @@
             cursor: pointer;
             transition: background 0.2s;
             font-size: 1em;
-            border-radius: 6px; 
+            border-radius: 6px;
             height: 40px;
             display: flex;
             align-items: center;
@@ -260,36 +291,38 @@
         .chat-footer input {
             flex: 1;
             border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 12px 15px;
+            border-radius: 24px;
+            padding: 12px 16px;
             font-size: 0.9em;
             outline: none;
-            background-color: var(--input-bg); 
+            background-color: var(--input-bg);
             color: var(--text-color);
             transition: border-color 0.2s, box-shadow 0.2s;
         }
         .chat-footer input:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.4);
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
         }
         .chat-footer button:last-child {
-            background: var(--primary-color);
+            background: var(--primary-gradient);
             color: white;
             border: none;
             padding: 0 20px;
             margin-left: 8px;
             cursor: pointer;
-            transition: background 0.2s;
-            height: 40px;
-            border-radius: 20px;
+            transition: opacity 0.2s, transform 0.15s;
+            height: 42px;
+            border-radius: 24px;
             font-weight: 600;
         }
         .chat-footer button:last-child:hover {
-            background: #0056b3;
+            opacity: 0.9;
+            transform: translateY(-1px);
         }
         .chat-footer button:last-child:disabled {
-            background: #3a5c82;
+            background: #45454f;
             cursor: not-allowed;
+            transform: none;
         }
         .chat-footer input::placeholder {
             color: #adb5bd;
@@ -301,23 +334,22 @@
         /* ============================ */
         .analysis-flex-container {
             display: flex;
-            justify-content: center; /* Centra el gráfico de pastel */
+            justify-content: center;
             align-items: flex-start;
             gap: 40px;
             margin-top: 40px;
         }
 
-        /* Gráfico de Pastel */
         .pie-chart-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: #2c2f33; /* Fondo oscuro para el wrapper */
+            background: #2c2f33;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            width: auto; /* Ajusta el ancho automáticamente */
-            min-width: 300px; /* Ancho mínimo para mantener buena legibilidad */
+            width: auto;
+            min-width: 300px;
         }
         .pie-chart {
             width: 200px;
@@ -325,7 +357,7 @@
             border-radius: 50%;
             margin-bottom: 20px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-            border: 5px solid #212529; /* Borde para contrastar con el fondo */
+            border: 5px solid #212529;
         }
         .legend {
             list-style: none;
@@ -351,41 +383,32 @@
             margin-top: 20px;
             font-size: 0.85em;
             color: #adb5bd;
-            text-align: center; /* Centra la nota al pie */
-            width: 100%; /* Asegura que la nota ocupe todo el ancho */
+            text-align: center;
+            width: 100%;
         }
 
         /* ============================ */
-        /* === MEDIA QUERY (MÓVIL) === */
-        /* ============================ */
-  /* ============================ */
         /* === MEDIA QUERY PARA MÓVIL (AJUSTADO PARA CENTRADO) === */
         /* ============================ */
         @media (max-width: 600px) {
             .chatbot-toggle-button {
-                bottom: 20px; /* Un poco más arriba en móvil */
+                bottom: 20px;
                 right: 20px;
             }
 
             .chat-widget-container {
-                /* CENTRADO PERFECTO EN MÓVIL */
-                width: 95%; /* Ocupa casi todo el ancho */
-                height: 85vh; /* Ocupa casi todo el alto */
-                
-                /* Centrado horizontal */
+                width: 95%;
+                height: 85vh;
                 left: 50%;
-                right: auto; /* Desactivar la posición right */
-                transform: translateX(-50%) scale(0.9); /* Centrar usando -50% del ancho y mantener la escala */
-                
-                /* Posición vertical */
-                bottom: 80px; /* Deja espacio para el botón toggle */
+                right: auto;
+                transform: translateX(-50%) scale(0.9);
+                bottom: 80px;
             }
-            
+
             .chat-widget-container.open {
-                /* Centrado horizontal al abrir */
                 transform: translateX(-50%) scale(1);
             }
-            
+
             .skills-grid {
                 flex-direction: column;
             }
@@ -420,7 +443,7 @@
                 <span class="site-brand-mark">✦</span>
                 <div>
                     <h1 class="site-title">Portafolio Profesional</h1>
-                 
+
                     <p class="site-tagline">Data Analytics • Python • Django</p>
                 </div>
             </div>
@@ -557,18 +580,19 @@
     <div class="chat-widget-container" id="chat-widget">
         <div class="chat-header">
             <div class="robot-icon">
-                <i class="fas fa-robot"></i> Asistente IA - AnalyticsDevs
+                <div class="avatar-circle"><i class="fas fa-robot"></i></div>
+                DevIA
             </div>
             <div class="theme-switch-wrapper">
                 <label class="theme-switch" for="checkbox">
-                    <input type="checkbox" id="checkbox" checked /> 
+                    <input type="checkbox" id="checkbox" checked />
                     <div class="slider"></div>
                 </label>
             </div>
         </div>
         <div class="chat-body" id="chat-body">
             <div class="chat-message bot-message" id="initial-message">
-                ¡Bienvenido/a! Soy su asistente de **AnalyticsDevs**. Estoy aquí para ofrecerle información detallada sobre el portafolio, servicios (Analítica, Desarrollo Web Django) y experiencia profesional. ¿En qué puedo asistirte hoy?
+                ¡Hola! Soy <strong>DevIA</strong>, el asistente virtual del portafolio de Gerardo Martínez. Puedo contarte sobre su experiencia, sus proyectos (MLOps, visión por computadora, IA) y su stack técnico. ¿En qué puedo ayudarte hoy?
             </div>
         </div>
         <div class="chat-footer">
@@ -589,11 +613,11 @@
         const chatWidget = document.getElementById('chat-widget');
         const toggleButton = document.getElementById('chatbot-toggle');
         const chatBody = document.getElementById("chat-body");
-        const initialMessage = document.getElementById("initial-message").cloneNode(true); 
+        const initialMessage = document.getElementById("initial-message").cloneNode(true);
         const clearChatButton = document.getElementById("clear-chat-button");
         const userInput = document.getElementById('user-input');
         const sendButton = document.getElementById('send-button');
-        const themeCheckbox = document.getElementById('checkbox'); 
+        const themeCheckbox = document.getElementById('checkbox');
 
         // Función de escritura (con manejo de \n para pausas/párrafos)
         function typeMessage(element, text, delay = 25) {
@@ -602,14 +626,14 @@
                 function typing() {
                     if (i < text.length) {
                         const char = text.charAt(i);
-                        
+
                         if (char === '\n') {
-                            element.innerHTML += '<br>'; 
+                            element.innerHTML += '<br>';
                             chatBody.scrollTop = chatBody.scrollHeight;
                             i++;
                             setTimeout(typing, delay + 150); // Pausa más larga para párrafos
                         } else {
-                            element.innerHTML += char; 
+                            element.innerHTML += char;
                             chatBody.scrollTop = chatBody.scrollHeight;
                             i++;
                             setTimeout(typing, delay);
@@ -621,10 +645,10 @@
                 typing();
             });
         }
-        
+
         // Función de reinicio de chat
         function clearChat() {
-            while (chatBody.firstChild) chatBody.removeChild(chatBody.firstChild); 
+            while (chatBody.firstChild) chatBody.removeChild(chatBody.firstChild);
             chatBody.appendChild(initialMessage.cloneNode(true));
             chatBody.scrollTop = chatBody.scrollHeight;
             userInput.disabled = false;
@@ -632,12 +656,13 @@
             userInput.focus();
         }
 
-        // Función para crear el indicador de "escribiendo"
+        // Función para crear el indicador de "escribiendo" con etiqueta DevIA
         function createTypingIndicator() {
             const botLoadingMsg = document.createElement("div");
             botLoadingMsg.classList.add("chat-message", "bot-message", "loading-indicator");
             botLoadingMsg.innerHTML = `
                 <div class="loading-spinner-container">
+                    <span class="typing-label">DevIA está escribiendo</span>
                     <span class="typing-indicator"></span>
                     <span class="typing-indicator"></span>
                     <span class="typing-indicator"></span>
@@ -660,12 +685,11 @@
             chatBody.appendChild(userMsg);
             chatBody.scrollTop = chatBody.scrollHeight;
             userInput.value = "";
-            
+
             // 2. Desactivar input y botón, y mostrar indicador de typing
             userInput.disabled = true;
             sendButton.disabled = true;
             const botLoadingMsg = createTypingIndicator();
-
 
             let reply = "";
             try {
@@ -679,19 +703,21 @@
                     body: "message=" + encodeURIComponent(message)
                 });
                 const data = await response.json();
-                
+
                 let rawReply = response.ok ? data.reply : data.error || "Error desconocido al procesar la respuesta.";
-                
-                // Limpieza de tags
+
+                // Limpieza de tags HTML únicamente. El contenido semántico de la respuesta
+                // (incluyendo cómo se presenta el bot) queda a cargo del system_instruction
+                // de Gemini, sin reemplazos manuales que lo puedan contradecir.
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = rawReply;
-                let cleanedText = tempDiv.textContent.replace("Hola", "").replace("Soy el asistente de Gerardo Martínez", "Soy tu asistente").replace("basándome en la información de mi CV", "").trim();
+                let cleanedText = tempDiv.textContent.trim();
 
                 if (cleanedText.length < 5) {
-                    reply = "¡Hola! Soy tu asistente de AnalyticsDevs. Estoy aquí para responder cualquier pregunta que tengas sobre mi experiencia, habilidades y proyectos. ¿En qué puedo ayudarte hoy?";
+                    reply = "¡Hola! Soy **DevIA**, el asistente virtual del portafolio de Gerardo. Estoy aquí para responder cualquier pregunta sobre su experiencia, habilidades y proyectos. ¿En qué puedo ayudarte hoy?";
                 } else {
                     // Se mantiene la lógica de inyectar saltos de línea para la función typeMessage
-                    reply = cleanedText.replace(/\. /g, '.\n').replace(/! /g, '!\n').replace(/\? /g, '?\n'); 
+                    reply = cleanedText.replace(/\. /g, '.\n').replace(/! /g, '!\n').replace(/\? /g, '?\n');
                 }
 
             } catch (error) {
@@ -700,13 +726,13 @@
             } finally {
                 // 3. Remover indicador de typing
                 if (chatBody.contains(botLoadingMsg)) chatBody.removeChild(botLoadingMsg);
-                
+
                 // 4. Iniciar efecto de escritura del bot
                 const botMsg = document.createElement("div");
                 botMsg.classList.add("chat-message", "bot-message");
-                botMsg.innerHTML = ""; 
+                botMsg.innerHTML = "";
                 chatBody.appendChild(botMsg);
-                
+
                 await typeMessage(botMsg, reply);
 
                 // 5. Reactivar input y botón
@@ -727,21 +753,20 @@
         // Cargar preferencia al iniciar
         window.addEventListener('load', () => {
             const savedTheme = localStorage.getItem('theme');
-            
+
             if (savedTheme === 'light') {
-                themeCheckbox.checked = false; 
+                themeCheckbox.checked = false;
                 chatWidget.classList.add('light-mode');
             } else {
-                themeCheckbox.checked = true; 
+                themeCheckbox.checked = true;
                 chatWidget.classList.remove('light-mode');
             }
-            
+
             setTimeout(() => toggleButton.classList.add('visible'), 1000);
         });
-        
+
         // Listener para el switch
         themeCheckbox.addEventListener('change', toggleTheme);
-
 
         // Toggle del chatbot
         toggleButton.addEventListener('click', (event) => {
