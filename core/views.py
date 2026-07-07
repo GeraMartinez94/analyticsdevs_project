@@ -42,53 +42,49 @@ CV_CONTENT = (
 # ----------------------------------------
 
 FEATURED_REPOS = [
+     {
+        'name': "Proyecto de CDP",
+        'description': "Un pipeline de datos completo y ejecutable que simula una arquitectura Cloudera CDP real para el sector energético.",
+        'html_url': "https://github.com/GeraMartinez94/Proyecto_CDP",
+       'language': "Python",
+        'updated_at': "2026-07-07T10:00:00Z"
+    },
    {
-        'name': "Reconocimiento_gestos_Python",
+        'name': "Reconocimiento de gestos",
         'description': "Proyecto de visión por computadora para reconocer gestos con la mano.",
         'html_url': "https://github.com/GeraMartinez94/Reconocimiento_gestos_Python",
-       'language': "Python",
-       'image': 'img/projects/reconocimiento_gestos.svg',
+        'language': "Python",
         'updated_at': "2024-05-15T10:00:00Z"
     },
    {
     'name': "MLOps: Gobernanza de Modelos (MLflow)",
     'description': "Implementación de un pipeline MLOps modular para el Clasificador de Prioridad. Demuestra Tracking, Versionamiento y Registro de Modelos con MLflow. La arquitectura es compatible con entornos Lakehouse (Snowflake) y orquestadores (dbt/Airflow).",
-    'html_url': "https://github.com/GeraMartinez94/mlops-mlflow-priority-classifier", 
+    'html_url': "https://github.com/GeraMartinez94/MLOps", 
     'language': "Python",
-    'image': 'img/projects/mlops_mlflow.svg',
+    
     'updated_at': "2025-11-11T03:30:00Z" 
 },
     {
-        'name': "Scrapting_Python",
+        'name': "Scrapting usando Python",
         'description': "Scripts y herramientas para la extracción de datos de la web.",
         'html_url': "https://github.com/GeraMartinez94/Scrapting_Python",
         'language': "Python",
-        'image': 'img/projects/scrapting_python.svg',
+       
         'updated_at': "2024-04-01T10:00:00Z"
     },
     {
-        'name': "Data-Analytics-Python",
+        'name': "Analisis de Datos en Python",
         'description': "Análisis de datos, visualización y modelos predictivos en Python.",
         'html_url': "https://github.com/GeraMartinez94/Data-Analytics-Python",
         'language': "Python",
-        'image': 'img/projects/data_analytics.svg',
         'updated_at': "2024-03-20T10:00:00Z"
     },
     {
-        'name': "Project_graphic_python",
+        'name': "Proyecto de Graficos en Python",
         'description': "Proyectos con interfaz gráfica usando Tkinter o PyQt.",
         'html_url': "https://github.com/GeraMartinez94/Project_graphic_python",
         'language': "Python",
-        'image': 'img/projects/project_graphic.svg',
         'updated_at': "2024-02-10T10:00:00Z"
-    },
-      {
-        'name': "analyticsdevs_project",
-        'description': "El portafolio dinámico con Django, PythonAnywhere y GitHub.",
-        'html_url': "https://github.com/GeraMartinez94/analyticsdevs_project",
-        'language': "Python",
-        'image': 'img/projects/analyticsdevs_project.svg',
-        'updated_at': "2025-10-07T10:00:00Z"
     }
 ]
 
